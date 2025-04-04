@@ -51,7 +51,7 @@ function App() {
             element={<FeeSelection />}
           />
           <Route
-            path="fee-and-receipt-processing/fee-receipt/details"
+            path="fee-and-receipt-processing/fee-receipt-details"
             element={<FeeReceipt />}
           />
           <Route

@@ -1,0 +1,29 @@
+<svg
+    width="120"
+    height="50"
+    viewBox="0 0 120 50"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <text
+      x="50%"
+      y="50%"
+      fill="#1E40AF"
+      fontSize="32"
+      fontWeight="bold"
+      text-anchor="end"
+      dominant-baseline="middle"
+    >
+      Neu
+    </text>
+    <text
+      x="50%"
+      y="50%"
+      fill="#DC2626"
+      fontSize="32"
+      fontWeight="bold"
+      text-anchor="start"
+      dominant-baseline="middle"
+    >
+      SMIS
+    </text>
+  </svg>

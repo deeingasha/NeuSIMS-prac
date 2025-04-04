@@ -20,8 +20,8 @@ export const menuItems = {
     {
       title: "Academic Settings",
       subItems: [
-        "Year/Term",
-        "Class/Stream",
+        "Year-Term",
+        "Class-Stream",
         "Subject Setting",
         "Exam Setting",
       ],
@@ -55,7 +55,7 @@ export const menuItems = {
     },
     {
       title: "Fee and Receipt Processing",
-      subItems: ["Fee Selection", "Fee Receipt/Details"],
+      subItems: ["Fee Selection", "Fee Receipt-Details"],
     },
     { title: "Pocket Money Processing", subItems: ["Pocket Money"] },
   ],
@@ -79,7 +79,7 @@ export const menuItems = {
   ],
   Reports: [
     {
-      title: "Staff/Student Lists",
+      title: "Staff-Student Lists",
       subItems: [
         "All Staff",
         "Teacher Per Class",
@@ -91,10 +91,10 @@ export const menuItems = {
     {
       title: "Academic Reports",
       subItems: [
-        "Subject List/Group",
-        "Subject List/Student",
-        "Subject List/Teacher",
-        "Attendance/Class",
+        "Subject List-Group",
+        "Subject List-Student",
+        "Subject List-Teacher",
+        "Attendance-Class",
         "Progress Report",
         "End Term Report",
         "End Term Report",

@@ -58,7 +58,10 @@ const Sidebar = () => {
         >
           {selectedTab}
         </h2>
-        <button onClick={toggleSidebar} className="p-2">
+        <button
+          onClick={toggleSidebar}
+          className="p-2rounded hover:bg-blue-700 transition-colors"
+        >
           {isOpen ? (
             <FaAngleDoubleLeft size={20} />
           ) : (
@@ -68,23 +71,23 @@ const Sidebar = () => {
       </div>
       <nav className="flex-1 overflow-y-auto">
         {menuItems[selectedTab]?.map((menu, idx) => (
-          <div key={idx} className="px-4 py-2">
+          <div key={idx} className="px-4 py-1">
             <button
               onClick={() => toggleMenu(menu.title)}
-              className={`w-full text-left font-semibold ${
+              className={`w-full text-left font-semibold px-3 py-2 rounded transition-colors ${
                 pathSegments[0] ===
                   menu.title.toLowerCase().replace(/ /g, "-") &&
                 currentPath.startsWith(
                   `/${menu.title.toLowerCase().replace(/ /g, "-")}`
                 )
-                  ? "bg-blue-600" //TODO find better indicator for active menu
-                  : ""
+                  ? "bg-blue-700" //TODO find better indicator for active menu
+                  : "hover:bg-blue-700/50"
               }`}
             >
               {menu.title}
             </button>
             {openMenus[menu.title] && (
-              <ul className="pl-4 mt-2">
+              <ul className="pl-4 mt-2 space-y-1">
                 {menu.subItems.map((sub, subIdx) => {
                   // Construct the full path for this item
                   const itemPath = `/${menu.title
@@ -96,8 +99,10 @@ const Sidebar = () => {
                   return (
                     <li
                       key={subIdx}
-                      className={`py-1 text-sm hover:underline cursor-pointer ${
-                        currentPath === itemPath ? "bg-blue-600" : ""
+                      className={`block py-2 px-3 text-sm rounded hover:underline transition-colors ${
+                        currentPath === itemPath
+                          ? "bg-blue-700"
+                          : "hover:bg-blue-700/50"
                       }`}
                     >
                       <Link to={itemPath}>{sub}</Link>

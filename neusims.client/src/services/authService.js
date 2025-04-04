@@ -3,7 +3,7 @@ import api from "./api";
 export const authService = {
   login: async (credentials) => {
     try {
-      const response = await api.post("/auth/login", credentials);
+      const response = await api.post("api/auth/login", credentials);
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
       }
@@ -27,7 +27,7 @@ export const authService = {
       console.log("Making signup request to:", `${api.BASE_URL}/auth/signup`);
       console.log("With data:", userData);
 
-      const response = await api.post("/auth/signup", userData);
+      const response = await api.post("api/auth/signup", userData);
       console.log("Signup response received:", response);
 
       return response.data;

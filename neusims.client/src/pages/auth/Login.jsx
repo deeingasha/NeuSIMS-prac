@@ -1,107 +1,7 @@
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-
-// const Login = () => {
-//   const navigate = useNavigate();
-//   const [formData, setFormData] = useState({
-//     email: "",
-//     password: "",
-//     remember: false,
-//   });
-
-//   const handleChange = (e) => {
-//     const { name, value, type, checked } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]: type === "checkbox" ? checked : value,
-//     });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log("Logging in with:", formData);
-//     navigate("/"); // Redirect to dashboard after login
-//   };
-
-//   return (
-//     <div className="flex h-screen">
-//       {/* Left Side */}
-//       <div className="w-1/2 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center p-8">
-//         <div className="text-white text-center">
-//           <h1 className="text-4xl font-bold mb-4">Welcome to NeuSMIS</h1>
-//           <p className="text-lg">
-//             NeuSMIS is a premier school management system designed to streamline
-//             administrative tasks and enhance the learning experience.
-//           </p>
-//         </div>
-//       </div>
-
-//       {/* Right Side */}
-//       <div className="w-1/2 flex justify-center items-center bg-gray-100">
-//         <div className="card w-96 bg-white shadow-xl p-6">
-//           <h2 className="text-2xl font-bold text-center mb-4">
-//             <span className="text-blue-700">Neu</span>
-//             <span className="text-red-700">SMIS</span>
-//           </h2>
-//           <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
-//           <form onSubmit={handleSubmit}>
-//             <div className="mb-4">
-//               <label className="block text-sm font-medium">Email</label>
-//               <input
-//                 type="email"
-//                 name="email"
-//                 value={formData.email}
-//                 onChange={handleChange}
-//                 className="input input-bordered w-full"
-//                 required
-//               />
-//             </div>
-//             <div className="mb-4">
-//               <label className="block text-sm font-medium">Password</label>
-//               <input
-//                 type="password"
-//                 name="password"
-//                 value={formData.password}
-//                 onChange={handleChange}
-//                 className="input input-bordered w-full"
-//                 required
-//               />
-//             </div>
-//             <div className="flex justify-between items-center mb-4">
-//               <label className="flex items-center space-x-2">
-//                 <input
-//                   type="checkbox"
-//                   name="remember"
-//                   checked={formData.remember}
-//                   onChange={handleChange}
-//                   className="checkbox"
-//                 />
-//                 <span className="text-sm">Remember Me</span>
-//               </label>
-//               <a href="#" className="text-blue-600 text-sm">
-//                 Forgot password?
-//               </a>
-//             </div>
-//             <div className="flex justify-center">
-//               <button type="submit" className="btn btn-primary w-1/4">
-//                 Login
-//               </button>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Login;
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "@components/LoadingSpinner";
 import { authService } from "@services/authService";
-// import LoadingSpinner from "../../components/LoadingSpinner";
-// import { authService } from "../../services/authService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -110,8 +10,8 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     username: "",
-    email: "",
-    password: "",
+    email: "dee@neusim.com",
+    password: "********",
     remember: false,
   });
 
@@ -121,6 +21,19 @@ const Login = () => {
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    // Simulate loading
+    setTimeout(() => {
+      // Set a dummy token
+      localStorage.setItem("token", "dummy-token");
+      // Navigate to dashboard
+      navigate("/");
+      setIsLoading(false);
+    }, 1000);
   };
 
   // const handleSubmit = async (e) => {
@@ -135,59 +48,31 @@ const Login = () => {
   //         password: formData.password,
   //       });
   //     } else {
-  //       await authService.signup({
+  //       console.log("Attempting signup with:", {
   //         username: formData.username,
   //         email: formData.email,
   //         password: formData.password,
   //       });
+
+  //       const response = await authService.signup({
+  //         username: formData.username,
+  //         email: formData.email,
+  //         password: formData.password,
+  //       });
+  //       console.log("Signup response:", response);
   //     }
   //     navigate("/");
   //   } catch (err) {
+  //     console.error("Signup error:", err);
   //     setError(
-  //       err.message ||
+  //       err.response?.data?.message ||
+  //         err.message ||
   //         `${isLogin ? "Login" : "Signup"} failed. Please try again.`
   //     );
   //   } finally {
   //     setIsLoading(false);
   //   }
   // };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setIsLoading(true);
-
-    try {
-      if (isLogin) {
-        await authService.login({
-          email: formData.email,
-          password: formData.password,
-        });
-      } else {
-        console.log("Attempting signup with:", {
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-        });
-
-        const response = await authService.signup({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-        });
-        console.log("Signup response:", response);
-      }
-      navigate("/");
-    } catch (err) {
-      console.error("Signup error:", err);
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          `${isLogin ? "Login" : "Signup"} failed. Please try again.`
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const toggleForm = () => {
     setIsLogin(!isLogin);

@@ -1,0 +1,30 @@
+body {
+  font-size: 14px; /* Set the default font size for the entire app */
+  font-family: Arial, sans-serif; /* Set the default font family */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.navbar a {
+  font-size: 14px; /* Adjust the font size for navbar links */
+}
+
+.navbar .text-xl {
+  font-size: 18px; /* Adjust the font size for the navbar title */
+}

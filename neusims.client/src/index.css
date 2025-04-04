@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Poppins", san-serif;
+}
+/* Table container styles */
+.table-container {
+  @apply border rounded-lg p-4;
+  /* min-height: 250px; Adjust this value to match your needs */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Global table styles */
+.table {
+  @apply border-collapse border-2 border-gray-800;
+  counter-reset: rowNumber;
+  /* flex: 1; Allow the table to grow and fill the container */
+}
+
+.table th {
+  @apply bg-gray-200 border border-gray-800 font-semibold px-2 py-1;
+}
+
+.table td {
+  @apply border border-gray-300 px-2 py-1;
+}
+
+/* Auto-numbering column */
+.table tbody tr {
+  counter-increment: rowNumber;
+}
+
+.table td.number-column::before {
+  content: counter(rowNumber);
+  @apply text-center block;
+}
+
+/* Zebra striping */
+.table.table-zebra tbody tr:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+/* Numbered column styles */
+/* .table tr[data-index]::before {
+  @apply bg-gray-100 border border-gray-300 px-2 py-1 text-center;
+  content: attr(data-index);
+} */
+
+/* Number column styling */
+/* .table .number-column {
+  @apply bg-gray-100 text-center w-12;
+} */

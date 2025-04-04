@@ -1,5 +1,6 @@
 import { useState } from "react";
-import FeeReceiptTab from "../components/Finance/FeeReceiptTab";
+import FeeReceiptTab from "@components/modules/finance/FeeReceiptTab";
+// import FeeReceiptTab from "../../components/finance/FeeReceiptTab";
 
 const FeeReceipt = () => {
   const [activeTab, setActiveTab] = useState("feeReceipt");

@@ -1,7 +1,9 @@
 // src/pages/FeeSelection.jsx
 import { useState } from "react";
-import StudentFeeSelection from "../components/Finance/StudentFeeSelection";
-import EditFeeSelection from "../components/Finance/EditFeeSElection";
+import StudentFeeSelection from "@components/modules/finance/StudentFeeSelection";
+import EditFeeSelection from "@components/modules/finance/EditFeeSelection";
+// import StudentFeeSelection from "../../components/finance/StudentFeeSelection";
+// import EditFeeSelection from "../../components/finance/EditFeeSElection";
 
 const FeeSelection = () => {
   const [activeTab, setActiveTab] = useState("feeSelection");

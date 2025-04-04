@@ -1,8 +1,12 @@
 import { useState } from "react";
-import FeeNames from "../components/Finance/FeeNames";
-import FeeStructure from "../components/Finance/FeeStructure";
-import TransportArea from "../components/finance/TransportArea";
-import TransportFeeStructure from "../components/Finance/TransportFeeStructure";
+import FeeNames from "@components/modules/finance/FeeNames";
+import FeeStructure from "@components/modules/finance/FeeStructure";
+import TransportArea from "@components/modules/finance/TransportArea";
+import TransportFeeStructure from "@components/modules/finance/TransportFeeStructure";
+// import FeeNames from "../../components/finance/FeeNames";
+// import FeeStructure from "../../components/finance/FeeStructure";
+// import TransportArea from "../../components/finance/TransportArea";
+// import TransportFeeStructure from "../../components/finance/TransportFeeStructure";
 
 const FinanceSettings = () => {
   const [activeTab, setActiveTab] = useState("feeNames");

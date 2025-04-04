@@ -98,8 +98,10 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authService } from "../services/authService";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "@components/LoadingSpinner";
+import { authService } from "@services/authService";
+// import LoadingSpinner from "../../components/LoadingSpinner";
+// import { authService } from "../../services/authService";
 
 const Login = () => {
   const navigate = useNavigate();

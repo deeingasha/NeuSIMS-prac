@@ -1,6 +1,8 @@
 import { useState } from "react";
-import StudentTable from "../components/StudentTable";
-import StudentForm from "../components/StudentForm";
+import StudentTable from "@components/modules/student/StudentTable";
+import StudentForm from "@components/modules/student/StudentForm";
+// import StudentTable from "../../components/modules/student/StudentTable";
+// import StudentForm from "../../components/modules/student/StudentForm";
 
 const StudentRegistration = () => {
   const [activeTab, setActiveTab] = useState("active");
@@ -13,13 +15,17 @@ const StudentRegistration = () => {
       {/* Tabs for Active Students & Alumni */}
       <div className="tabs mb-4">
         <button
-          className={`tab tab-bordered ${activeTab === "active" ? "tab-active" : ""}`}
+          className={`tab tab-bordered ${
+            activeTab === "active" ? "tab-active" : ""
+          }`}
           onClick={() => setActiveTab("active")}
         >
           Active Students
         </button>
         <button
-          className={`tab tab-bordered ${activeTab === "alumni" ? "tab-active" : ""}`}
+          className={`tab tab-bordered ${
+            activeTab === "alumni" ? "tab-active" : ""
+          }`}
           onClick={() => setActiveTab("alumni")}
         >
           Alumni

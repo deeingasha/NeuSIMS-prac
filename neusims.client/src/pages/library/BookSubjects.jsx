@@ -1,4 +1,3 @@
-// src/pages/Library/BookSubjects.jsx
 import { useState } from "react";
 import PropTypes from "prop-types";
 

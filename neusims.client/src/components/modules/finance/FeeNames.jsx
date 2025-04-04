@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { feeService } from "../../services/feeService";
-import LoadingSpinner from "../LoadingSpinner";
+import { feeService } from "@services/feeService";
+import LoadingSpinner from "@components/LoadingSpinner";
 import PropTypes from "prop-types";
 
 const FeeNames = () => {

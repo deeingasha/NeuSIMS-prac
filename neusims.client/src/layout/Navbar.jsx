@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import EmailSMSDropdown from "./EmailSMSDropdown";
+import EmailSMSDropdown from "@components/modules/EmailSMSDropdown";
+// import EmailSMSDropdown from "../components/modules/EmailSMSDropdown";
 import { FaUserCircle } from "react-icons/fa";
 import PropTypes from "prop-types";
 

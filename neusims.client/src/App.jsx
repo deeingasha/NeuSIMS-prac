@@ -1,19 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./pages/auth/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 import MainLayout from "./layout/MainLayout";
 import Dashboard from "./pages/Dashboard";
-import Student from "./pages/Student";
-import Login from "./pages/Login";
-import ProtectedRoute from "./components/ProtectedRoute";
-import StudentClassAllocation from "./pages/StudentClassAllocation";
-import StaffClassAllocation from "./pages/StaffClassAllocation";
-import FinanceSettings from "./pages/FinanceSettings";
-import FeeSelection from "./pages/FeeSelection";
-import FeeReceipt from "./pages/FeeReceiptDetails";
-import PocketMoney from "./pages/PocketMoney";
-import BookSubjects from "./pages/Library/BookSubjects";
-import MaterialType from "./pages/Library/MaterialType";
-import LoanType from "./pages/Library/LoanType";
-import AddClassBooks from "./pages/Library/AddClassBooks";
+import Student from "./pages/school_administration/Student";
+import StudentClassAllocation from "./pages/school_administration/StudentClassAllocation";
+import StaffClassAllocation from "./pages/school_administration/StaffClassAllocation";
+import FinanceSettings from "./pages/finance/FinanceSettings";
+import FeeSelection from "./pages/finance/FeeSelection";
+import FeeReceipt from "./pages/finance/FeeReceiptDetails";
+import PocketMoney from "./pages/finance/PocketMoney";
+import BookSubjects from "./pages/library/BookSubjects";
+import MaterialType from "./pages/library/MaterialType";
+import LoanType from "./pages/library/LoanType";
+import AddClassBooks from "./pages/library/AddClassBooks";
 
 function App() {
   return (

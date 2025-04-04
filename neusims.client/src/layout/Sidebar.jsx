@@ -3,155 +3,43 @@ import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
+import { menuItems, getMenuPath } from "../config/MenuConfig";
+import { useMenu } from "../context/MenuContext";
 
-const menuItems = {
-  "Parameter Settings": [
-    {
-      title: "School Information",
-      subItems: ["School Information", "Department"],
-    },
-    { title: "Salutation", subItems: ["Salutation"] },
-    { title: "Staff Job Type", subItems: ["Job Type"] },
-    {
-      title: "Academic Settings",
-      subItems: [
-        "Year/Term",
-        "Class/Stream",
-        "Subject Setting",
-        "Exam Setting",
-      ],
-    },
-    {
-      title: "Email Settings",
-      subItems: ["Email Settings", "SMS Server Settings"],
-    },
-    { title: "Bank Settings", subItems: ["Bank Settings"] },
-  ],
-  "School Administration": [
-    { title: "Holiday Management", subItems: [] },
-    { title: "Registration", subItems: ["Student", "Staff", "Student Status"] },
-    { title: "Identity Card", subItems: ["Student", "Staff"] },
-    { title: "Class Allocation", subItems: ["Student", "Staff"] },
-    { title: "Subject Allocation", subItems: ["Student", "Staff"] },
-    {
-      title: "Exams",
-      subItems: ["Mark Entry", "Summary", "Comments", "Test Selection"],
-    },
-    { title: "Attendance", subItems: ["Attendance", "Attendance Status"] },
-  ],
-  "System Administration": [
-    { title: "User Accounts", subItems: ["User Account"] },
-    { title: "Data Backup", subItems: ["Data Backup"] },
-  ],
-  Finance: [
-    {
-      title: "Finance Settings",
-      subItems: ["Finance Settings", "Due Date Settings"],
-    },
-    {
-      title: "Fee and Receipt Processing",
-      subItems: ["Fee Selection", "Fee Receipt/Details"],
-    },
-    { title: "Pocket Money Processing", subItems: ["Pocket Money"] },
-  ],
-  Library: [
-    {
-      title: "Library Settings",
-      subItems: ["Book Subjects", "Add Material", "Loan Type"],
-    },
-    {
-      title: "Library Class Books",
-      subItems: ["Add Class Books", "Issue Books", "Return Books"],
-    },
-    {
-      title: "Library Books",
-      subItems: [
-        "Add Library Books",
-        "Issue Library Books",
-        "Return Library Books",
-      ],
-    },
-  ],
-  Reports: [
-    {
-      title: "Staff/Student Lists",
-      subItems: [
-        "All Staff",
-        "Teacher Per Class",
-        "Staff List per Job Type",
-        "Student List Per Class",
-        "Student Per House",
-      ],
-    },
-    {
-      title: "Academic Reports",
-      subItems: [
-        "Subject List/Group",
-        "Subject List/Student",
-        "Subject List/Teacher",
-        "Attendance/Class",
-        "Progress Report",
-        "End Term Report",
-        "End Term Report",
-        "All Marks Summary",
-        "Learner's Competency",
-      ],
-    },
-    {
-      title: "Finance Reports",
-      subItems: [
-        "Fee Structure",
-        "Fee Invoice",
-        "Fee Statement Per Class",
-        "Fee Statement Per Student",
-        "All Students' Balance",
-        "Pocket Money Balance",
-      ],
-    },
-    {
-      title: "Library Reports",
-      subItems: [
-        "Books Issued Per Date",
-        "Books Due Per Date",
-        "Books Overdue",
-        "Lost Books",
-      ],
-    },
-  ],
-};
-
-const Sidebar = ({ selectedTab }) => {
+const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [openMenus, setOpenMenus] = useState({});
   const location = useLocation();
-  const navigate = useNavigate();
+  const { selectedTab } = useMenu();
 
   // Get current path segments
   const currentPath = location.pathname;
   const pathSegments = currentPath.split("/").filter(Boolean);
 
-  useEffect(() => {
-    // Open the menu for the current path
-    if (pathSegments.length >= 2) {
-      const menuTitle = menuItems[selectedTab]?.find((menu) =>
-        menu.subItems.some(
-          (sub) => sub.toLowerCase().replace(/ /g, "-") === pathSegments[1]
-        )
-      )?.title;
+  const toggleSidebar = () => setIsOpen(!isOpen);
+  // const toggleMenu = (title) => {
+  //   setOpenMenus((prev) => ({ ...prev, [title]: !prev[title] }));
+  // };
 
-      if (menuTitle) {
-        setOpenMenus({ [menuTitle]: true });
+  // Add this useEffect to handle initial open menu based on URL
+  useEffect(() => {
+    if (pathSegments.length >= 2) {
+      const currentMenu = menuItems[selectedTab]?.find(
+        (menu) =>
+          menu.title.toLowerCase().replace(/ /g, "-") === pathSegments[0] &&
+          menu.subItems.some(
+            (sub) => sub.toLowerCase().replace(/ /g, "-") === pathSegments[1]
+          )
+      );
+
+      if (currentMenu) {
+        setOpenMenus({ [currentMenu.title]: true });
       }
     }
   }, [selectedTab, currentPath]);
 
-  const toggleSidebar = () => setIsOpen(!isOpen);
   const toggleMenu = (title) => {
-    // // Close all menus first
-    // setOpenMenus({});
-    // Then open only the clicked one
     setOpenMenus((prev) => ({
-      ...prev,
       [title]: !prev[title],
     }));
   };
@@ -186,10 +74,10 @@ const Sidebar = ({ selectedTab }) => {
               className={`w-full text-left font-semibold ${
                 pathSegments[0] ===
                   menu.title.toLowerCase().replace(/ /g, "-") &&
-                currentPath.includes(
-                  menu.title.toLowerCase().replace(/ /g, "-")
+                currentPath.startsWith(
+                  `/${menu.title.toLowerCase().replace(/ /g, "-")}`
                 )
-                  ? "text-yellow-300"
+                  ? "bg-blue-600" //TODO find better indicator for active menu
                   : ""
               }`}
             >
@@ -209,7 +97,7 @@ const Sidebar = ({ selectedTab }) => {
                     <li
                       key={subIdx}
                       className={`py-1 text-sm hover:underline cursor-pointer ${
-                        currentPath === itemPath ? "text-yellow-300" : ""
+                        currentPath === itemPath ? "bg-blue-600" : ""
                       }`}
                     >
                       <Link to={itemPath}>{sub}</Link>
@@ -223,9 +111,6 @@ const Sidebar = ({ selectedTab }) => {
       </nav>
     </aside>
   );
-};
-Sidebar.propTypes = {
-  selectedTab: PropTypes.string.isRequired,
 };
 
 export default Sidebar;

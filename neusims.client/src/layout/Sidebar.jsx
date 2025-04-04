@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 
 const menuItems = {
   "Parameter Settings": [
@@ -122,9 +123,17 @@ const menuItems = {
 const Sidebar = ({ selectedTab }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [openMenus, setOpenMenus] = useState({});
+  const location = useLocation();
+
+  // Get current path segments
+  const pathSegments = location.pathname.split("/").filter(Boolean);
+  const currentPath = location.pathname;
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const toggleMenu = (title) => {
+    // Close all menus first
+    setOpenMenus({});
+    // Then open only the clicked one
     setOpenMenus((prev) => ({ ...prev, [title]: !prev[title] }));
   };
 
@@ -140,7 +149,7 @@ const Sidebar = ({ selectedTab }) => {
             isOpen ? "block" : "hidden"
           }`}
         >
-          Menu
+          {selectedTab}
         </h2>
         <button onClick={toggleSidebar} className="p-2">
           {isOpen ? (
@@ -155,26 +164,39 @@ const Sidebar = ({ selectedTab }) => {
           <div key={idx} className="px-4 py-2">
             <button
               onClick={() => toggleMenu(menu.title)}
-              className="w-full text-left font-semibold"
+              className={`w-full text-left font-semibold ${
+                pathSegments[0] ===
+                  menu.title.toLowerCase().replace(/ /g, "-") &&
+                currentPath.includes(
+                  menu.title.toLowerCase().replace(/ /g, "-")
+                )
+                  ? "text-yellow-300"
+                  : ""
+              }`}
             >
               {menu.title}
             </button>
             {openMenus[menu.title] && (
               <ul className="pl-4 mt-2">
-                {menu.subItems.map((sub, subIdx) => (
-                  <li
-                    key={subIdx}
-                    className="py-1 text-sm hover:underline cursor-pointer"
-                  >
-                    <Link
-                      to={`/${menu.title.toLowerCase().replace(/ /g, "-")}/${sub
-                        .toLowerCase()
-                        .replace(/ /g, "-")}`}
+                {menu.subItems.map((sub, subIdx) => {
+                  // Construct the full path for this item
+                  const itemPath = `/${menu.title
+                    .toLowerCase()
+                    .replace(/ /g, "-")}/${sub
+                    .toLowerCase()
+                    .replace(/ /g, "-")}`;
+
+                  return (
+                    <li
+                      key={subIdx}
+                      className={`py-1 text-sm hover:underline cursor-pointer ${
+                        currentPath === itemPath ? "text-yellow-300" : ""
+                      }`}
                     >
-                      {sub}
-                    </Link>
-                  </li>
-                ))}
+                      <Link to={itemPath}>{sub}</Link>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

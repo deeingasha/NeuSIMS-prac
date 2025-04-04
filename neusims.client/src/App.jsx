@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/Login";
+import ComingSoon from "./pages/ComingSoon";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MainLayout from "./layout/MainLayout";
 import Dashboard from "./pages/Dashboard";
@@ -70,6 +71,8 @@ function App() {
             path="/library-class-books/add-class-books"
             element={<AddClassBooks />}
           />
+          {/* Catch-all route for unimplemented features */}
+          <Route path="*" element={<ComingSoon />} />
         </Route>
       </Routes>
     </Router>

@@ -130,11 +130,11 @@ const Sidebar = ({ selectedTab }) => {
 
   return (
     <aside
-      className={`h-screen bg-blue-600 bg-opacity-90 text-gray-50 transition-all ${
+      className={`flex flex-col bg-blue-600 bg-opacity-90 text-gray-50 transition-all ${
         isOpen ? "w-64" : "w-20"
       } overflow-hidden`}
     >
-      <div className="flex justify-between items-center px-4 py-3">
+      <div className="flex justify-between items-center px-4 py-3 flex-shrink-0">
         <h2
           className={`text-lg font-bold transition-all ${
             isOpen ? "block" : "hidden"
@@ -150,7 +150,7 @@ const Sidebar = ({ selectedTab }) => {
           )}
         </button>
       </div>
-      <nav className="mt-4">
+      <nav className="flex-1 overflow-y-auto">
         {menuItems[selectedTab]?.map((menu, idx) => (
           <div key={idx} className="px-4 py-2">
             <button

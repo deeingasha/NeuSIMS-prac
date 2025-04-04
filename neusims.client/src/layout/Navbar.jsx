@@ -15,23 +15,33 @@ const Navbar = () => {
 
   return (
     <nav className="bg-blue-600 text-white">
-      <div className="flex items-center space-x-3 p-2">
-        <a className="text-xl font-bold bg-gray-50 " href="/">
-          <span className="text-blue-700">Neu</span>
-          <span className="text-red-700">SMIS</span>
-        </a>
-        {TABS.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setSelectedTab(tab)}
-            className={`px-4 py-2 rounded ${
-              selectedTab === tab ? "bg-blue-700" : ""
-            }`}
+      <div className="flex justify-between items-center p-2">
+        {/* Left side with logo and navigation */}
+        <div className="flex items-center space-x-6">
+          <a
+            className="text-xl font-bold bg-gray-50 px-2 py-1 rounded"
+            href="/"
           >
-            {tab}
-          </button>
-        ))}
-        <div className="flex items-center space-x-4">
+            <span className="text-blue-700">Neu</span>
+            <span className="text-red-700">SMIS</span>
+          </a>
+          <div className="flex items-center space-x-4 text-sm">
+            {TABS.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setSelectedTab(tab)}
+                className={`px-3 py-2 rounded hover:bg-blue-700 transition-colors ${
+                  selectedTab === tab ? "bg-blue-700" : ""
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Right side with user actions */}
+        <div className="flex items-center space-x-4 text-sm">
           <span className="hover:underline cursor-pointer">
             Change Password
           </span>

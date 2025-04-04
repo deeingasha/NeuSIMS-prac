@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import EmailSMSDropdown from "@components/modules/EmailSMSDropdown";
 import { FaUserCircle } from "react-icons/fa";
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
 
-const Navbar = ({ onTabClick }) => {
+const Navbar = ({ onTabClick, selectedTab }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,34 +20,16 @@ const Navbar = ({ onTabClick }) => {
     "Help",
   ];
 
-  // Get the current selected tab from localStorage
-  const [activeTab, setActiveTab] = useState(
-    () => localStorage.getItem("selectedTab") || "School Administration"
-  );
-
-  const findActiveTab = (path) => {
-    const segment = path.split("/")[1]?.toLowerCase();
-    const matchedTab = tabs.find(
-      (tab) => tab.toLowerCase().replace(/ /g, "-") === segment
-    );
-    return matchedTab || "School Administration";
-  };
-
   const handleTabClick = (tab) => {
     if (tab === "Email/SMS") {
       setIsDropdownOpen(!isDropdownOpen);
     } else {
-      setActiveTab(tab); // Update local state
-      onTabClick(tab); // Update parent state
+      onTabClick(tab);
+      // Navigate to the corresponding route
+      const route = `/${tab.toLowerCase().replace(/ /g, "-")}`;
+      navigate(route);
     }
   };
-
-  // Update activeTab when route changes
-  useEffect(() => {
-    const newTab = findActiveTab(location.pathname);
-    setActiveTab(newTab);
-    onTabClick(newTab);
-  }, [location.pathname]);
 
   const handleLogout = () => {
     // Perform any logout logic here (e.g., clearing tokens)
@@ -69,7 +50,7 @@ const Navbar = ({ onTabClick }) => {
               href="#"
               onClick={() => handleTabClick(tab)}
               className={`hover:underline cursor-pointer ${
-                activeTab === tab ? "text-yellow-300 font-bold" : ""
+                selectedTab === tab ? "text-yellow-300 font-bold" : ""
               }`}
             >
               {tab}
@@ -91,6 +72,7 @@ const Navbar = ({ onTabClick }) => {
 
 Navbar.propTypes = {
   onTabClick: PropTypes.func.isRequired,
+  selectedTab: PropTypes.string.isRequired,
 };
 
 export default Navbar;

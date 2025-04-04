@@ -5,13 +5,20 @@ import Sidebar from "./Sidebar";
 
 const MainLayout = () => {
   const [selectedTab, setSelectedTab] = useState(() => {
-    // Initialize from localStorage or default to "School Administration"
-    return localStorage.getItem("selectedTab") || "School Administration";
+    const path = location.pathname.split("/")[1];
+    // Convert path to tab name (e.g., "school-administration" to "School Administration")
+    if (path) {
+      const tabName = path
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+      return tabName;
+    }
+    return "School Administration";
   });
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
-    localStorage.setItem("selectedTab", tab); // Save to localStorage
   };
 
   // Update selectedTab when route changes
@@ -24,7 +31,7 @@ const MainLayout = () => {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
-      <Navbar onTabClick={handleTabClick} />
+      <Navbar onTabClick={handleTabClick} selectedTab={selectedTab} />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar selectedTab={selectedTab} />
         <main className="p-4 bg-gray-100 flex-1 overflow-auto">

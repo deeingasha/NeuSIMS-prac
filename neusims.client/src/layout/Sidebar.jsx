@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const menuItems = {
   "Parameter Settings": [
@@ -124,17 +124,36 @@ const Sidebar = ({ selectedTab }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [openMenus, setOpenMenus] = useState({});
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Get current path segments
-  const pathSegments = location.pathname.split("/").filter(Boolean);
   const currentPath = location.pathname;
+  const pathSegments = currentPath.split("/").filter(Boolean);
+
+  useEffect(() => {
+    // Open the menu for the current path
+    if (pathSegments.length >= 2) {
+      const menuTitle = menuItems[selectedTab]?.find((menu) =>
+        menu.subItems.some(
+          (sub) => sub.toLowerCase().replace(/ /g, "-") === pathSegments[1]
+        )
+      )?.title;
+
+      if (menuTitle) {
+        setOpenMenus({ [menuTitle]: true });
+      }
+    }
+  }, [selectedTab, currentPath]);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const toggleMenu = (title) => {
-    // Close all menus first
-    setOpenMenus({});
+    // // Close all menus first
+    // setOpenMenus({});
     // Then open only the clicked one
-    setOpenMenus((prev) => ({ ...prev, [title]: !prev[title] }));
+    setOpenMenus((prev) => ({
+      ...prev,
+      [title]: !prev[title],
+    }));
   };
 
   return (

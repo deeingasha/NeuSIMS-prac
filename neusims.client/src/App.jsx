@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Student from "./pages/school_administration/Student";
 import StudentClassAllocation from "./pages/school_administration/StudentClassAllocation";
 import StaffClassAllocation from "./pages/school_administration/StaffClassAllocation";
+import StudentSubjectAllocation from "./pages/school_administration/StudentSubjectAllocation";
 import StudentAttendance from "./pages/school_administration/StudentAttendance";
 import AttendanceStatus from "./pages/school_administration/AttendanceStatus";
 import FinanceSettings from "./pages/finance/FinanceSettings";
@@ -45,6 +46,10 @@ function App() {
           <Route
             path="class-allocation/staff"
             element={<StaffClassAllocation />}
+          />
+          <Route
+            path="subject-allocation/student"
+            element={<StudentSubjectAllocation />}
           />
           <Route path="attendance/attendance" element={<StudentAttendance />} />
           <Route

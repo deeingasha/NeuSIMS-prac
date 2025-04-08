@@ -39,8 +39,13 @@ export const menuItems = {
     { title: "Class Allocation", subItems: ["Student", "Staff"] },
     { title: "Subject Allocation", subItems: ["Student", "Staff"] },
     {
-      title: "Exams",
-      subItems: ["Mark Entry", "Summary", "Comments", "Test Selection"],
+      title: "Exam",
+      subItems: [
+        "Mark Entry",
+        "Mark Entry Summary",
+        "Comments",
+        "Test Selection",
+      ],
     },
     { title: "Attendance", subItems: ["Attendance", "Attendance Status"] },
   ],

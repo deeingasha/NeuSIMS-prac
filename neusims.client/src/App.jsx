@@ -8,6 +8,7 @@ import StudentClassAllocation from "./pages/school_administration/StudentClassAl
 import StaffClassAllocation from "./pages/school_administration/StaffClassAllocation";
 import StudentSubjectAllocation from "./pages/school_administration/StudentSubjectAllocation";
 import StaffSubjectAllocation from "./pages/school_administration/StaffSubjectAllocation";
+import MarkEntrySummary from "./pages/school_administration/MarkEntrySummary";
 import StudentAttendance from "./pages/school_administration/StudentAttendance";
 import AttendanceStatus from "./pages/school_administration/AttendanceStatus";
 import FinanceSettings from "./pages/finance/FinanceSettings";
@@ -55,6 +56,10 @@ function App() {
           <Route
             path="subject-allocation/staff"
             element={<StaffSubjectAllocation />}
+          />
+          <Route
+            path="exam/mark-entry-summary"
+            element={<MarkEntrySummary />}
           />
           <Route path="attendance/attendance" element={<StudentAttendance />} />
           <Route

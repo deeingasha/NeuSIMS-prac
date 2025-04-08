@@ -14,6 +14,8 @@ import BookSubjects from "./pages/library/BookSubjects";
 import MaterialType from "./pages/library/MaterialType";
 import LoanType from "./pages/library/LoanType";
 import AddClassBooks from "./pages/library/AddClassBooks";
+import IssueBooks from "./pages/library/IssueBooks";
+import ReturnBooks from "./pages/library/ReturnBooks";
 import ComingSoon from "./pages/ComingSoon";
 
 function App() {
@@ -70,6 +72,14 @@ function App() {
           <Route
             path="/library-class-books/add-class-books"
             element={<AddClassBooks />}
+          />
+          <Route
+            path="/library-class-books/issue-books"
+            element={<IssueBooks />}
+          />
+          <Route
+            path="/library-class-books/return-books"
+            element={<ReturnBooks />}
           />
           {/* Catch-all route for unimplemented features */}
           <Route path="*" element={<ComingSoon />} />

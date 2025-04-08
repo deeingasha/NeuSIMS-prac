@@ -25,7 +25,7 @@ const Navbar = () => {
             <span className="text-blue-700">Neu</span>
             <span className="text-red-700">SMIS</span>
           </a>
-          <div className="flex items-center space-x-4 text-sm">
+          <div className="flex items-center space-x-1 text-sm">
             {TABS.map((tab) => (
               <button
                 key={tab}
@@ -41,7 +41,7 @@ const Navbar = () => {
         </div>
 
         {/* Right side with user actions */}
-        <div className="flex items-center space-x-4 text-sm">
+        <div className="flex items-center space-x-3 text-sm">
           <span className="hover:underline cursor-pointer">
             Change Password
           </span>

@@ -9,8 +9,8 @@ const Login = () => {
   const [error, setError] = useState(null);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
-    username: "",
-    email: "dee@neusim.com",
+    username: "dee",
+    // email: "dee@neusim.com",
     password: "********",
     remember: false,
   });
@@ -22,64 +22,66 @@ const Login = () => {
       [name]: type === "checkbox" ? checked : value,
     });
   };
+  // const handleSubmit = async (e) => {
+  //     e.preventDefault();
+  //     setIsLoading(true);
+
+  //  // Simulate loading
+  //  setTimeout(() => {
+  //    // Set a dummy token
+  //    localStorage.setItem("token", "dummy-token");
+  //    // Navigate to dashboard
+  //    navigate("/");
+  //    setIsLoading(false);
+  //  }, 1000);
+  //};
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     setIsLoading(true);
 
-    // Simulate loading
-    setTimeout(() => {
-      // Set a dummy token
-      localStorage.setItem("token", "dummy-token");
-      // Navigate to dashboard
+    try {
+      if (isLogin) {
+        await authService.login({
+          username: formData.username,
+          password: formData.password,
+          tokenheader: "", // Add this to match LoginModel.cs
+        });
+      } else {
+        const signupData = {
+          username: formData.username,
+          password: formData.password,
+          tokenheader: "", // Add this to match LoginModel.cs
+        };
+        console.log("Attempting signup with:", signupData);
+
+        const response = await authService.signup(signupData);
+        console.log("Signup response:", response);
+      }
       navigate("/");
+    } catch (err) {
+      console.error("Auth error details:", {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+      });
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          `${isLogin ? "Login" : "Signup"} failed. Please try again.`
+      );
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setError(null);
-  //   setIsLoading(true);
-
-  //   try {
-  //     if (isLogin) {
-  //       await authService.login({
-  //         email: formData.email,
-  //         password: formData.password,
-  //       });
-  //     } else {
-  //       console.log("Attempting signup with:", {
-  //         username: formData.username,
-  //         email: formData.email,
-  //         password: formData.password,
-  //       });
-
-  //       const response = await authService.signup({
-  //         username: formData.username,
-  //         email: formData.email,
-  //         password: formData.password,
-  //       });
-  //       console.log("Signup response:", response);
-  //     }
-  //     navigate("/");
-  //   } catch (err) {
-  //     console.error("Signup error:", err);
-  //     setError(
-  //       err.response?.data?.message ||
-  //         err.message ||
-  //         `${isLogin ? "Login" : "Signup"} failed. Please try again.`
-  //     );
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
     setError(null);
     setFormData({
       username: "",
-      email: "",
+      // email: "",
       password: "",
       remember: false,
     });
@@ -110,21 +112,20 @@ const Login = () => {
           )}
 
           <form onSubmit={handleSubmit}>
-            {!isLogin && (
-              <div className="mb-4">
-                <label className="block text-sm font-medium">Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  className="input input-bordered w-full"
-                  required
-                  disabled={isLoading}
-                />
-              </div>
-            )}
             <div className="mb-4">
+              <label className="block text-sm font-medium">Username</label>
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                className="input input-bordered w-full"
+                required
+                disabled={isLoading}
+              />
+            </div>
+
+            {/* <div className="mb-4">
               <label className="block text-sm font-medium">Email</label>
               <input
                 type="email"
@@ -135,7 +136,7 @@ const Login = () => {
                 required
                 disabled={isLoading}
               />
-            </div>
+            </div> */}
             <div className="mb-4">
               <label className="block text-sm font-medium">Password</label>
               <input

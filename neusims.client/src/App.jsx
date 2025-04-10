@@ -21,6 +21,7 @@ import LoanType from "./pages/library/LoanType";
 import AddClassBooks from "./pages/library/AddClassBooks";
 import IssueBooks from "./pages/library/IssueBooks";
 import ReturnBooks from "./pages/library/ReturnBooks";
+import SendEmail from "./pages/email-sms/email-sendEmail";
 import ComingSoon from "./pages/ComingSoon";
 
 function App() {
@@ -103,6 +104,7 @@ function App() {
             path="/library-class-books/return-books"
             element={<ReturnBooks />}
           />
+          <Route path="/email-sms/email" element={<SendEmail />} />
           {/* Catch-all route for unimplemented features */}
           <Route path="*" element={<ComingSoon />} />
         </Route>

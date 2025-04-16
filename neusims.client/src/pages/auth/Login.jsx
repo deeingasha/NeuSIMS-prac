@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "@components/LoadingSpinner";
 import { authService } from "@services/authService";
+import { getErrorMessage } from "@utils/errorHelpers";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const Login = () => {
   const [formData, setFormData] = useState({
     username: "dee",
     // email: "dee@neusim.com",
-    password: "********",
+    password: "1234",
     remember: false,
   });
 
@@ -37,17 +38,24 @@ const Login = () => {
   //};
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent form submission
     setError(null);
     setIsLoading(true);
 
     try {
       if (isLogin) {
-        await authService.login({
+        const response = await authService.login({
           username: formData.username,
           password: formData.password,
           tokenheader: "", // Add this to match LoginModel.cs
         });
+        // Only navigate if we have a token
+        if (response && response.token) {
+          const from = location.state?.from?.pathname || "/";
+          navigate(from, { replace: true });
+        } else {
+          setError("Invalid login response");
+        }
       } else {
         const signupData = {
           username: formData.username,
@@ -58,19 +66,23 @@ const Login = () => {
 
         const response = await authService.signup(signupData);
         console.log("Signup response:", response);
+        if (response.message === "User registered successfully") {
+          navigate("/");
+        }
       }
-      navigate("/");
     } catch (err) {
-      console.error("Auth error details:", {
-        message: err.message,
-        response: err.response?.data,
-        status: err.response?.status,
-      });
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          `${isLogin ? "Login" : "Signup"} failed. Please try again.`
-      );
+      // console.error("Auth error details:", {
+      //   message: err.message,
+      //   response: err.response?.data,
+      //   status: err.response?.status,
+      // });
+      // setError(
+      //   err.response?.data?.message ||
+      //     err.message ||
+      //     `${isLogin ? "Login" : "Signup"} failed. Please try again.`
+      // );
+      setError(getErrorMessage(err));
+      console.error("Login failed:", err);
     } finally {
       setIsLoading(false);
     }

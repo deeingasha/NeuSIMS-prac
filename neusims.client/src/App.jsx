@@ -28,19 +28,18 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Login Route */}
+        {/* Public Routes */}
         <Route path="/login" element={<Login />} />
 
         {/* Protected Routes that use MainLayout */}
         <Route
-          path="/"
           element={
             <ProtectedRoute>
               <MainLayout />
             </ProtectedRoute>
           }
         >
-          <Route index element={<Dashboard />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="registration/student" element={<Student />} />
           <Route
             path="class-allocation/student"

@@ -55,6 +55,7 @@
 // export default api;
 
 import axios from "axios";
+import { AuthError } from "@utils/apiErrorHandler";
 
 const api = axios.create({
   headers: {
@@ -112,11 +113,16 @@ api.interceptors.response.use(
       data: error.response?.data,
       message: error.message,
     });
-    if (error.response?.status === 401) {
+    // Don't handle 401s here for login/signup endpoints
+    if (
+      error.response?.status === 401 &&
+      !error.config.url.includes("/auth/login") &&
+      !error.config.url.includes("/auth/signup")
+    ) {
       localStorage.removeItem("token");
       localStorage.removeItem("username");
-      window.location.href = "/login";
-      console.log("Unauthenticated:Redirecting to login page...");
+      // Let the component handle the navigation
+      error.shouldRedirect = true;
     }
     return Promise.reject(error);
   }

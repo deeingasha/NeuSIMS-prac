@@ -1,4 +1,6 @@
 import api from "./api";
+import { handleAuthError } from "../utils/apiErrorHandler"; // Adjust the import path as necessary
+import { ERROR_MESSAGES } from "../utils/errorConstants"; // Adjust the import path as necessary
 
 export const authService = {
   signup: async (userData) => {
@@ -14,20 +16,25 @@ export const authService = {
   login: async (credentials) => {
     try {
       const response = await api.post("/auth/login", credentials);
-      if (response.data.token) {
+      if (response.data?.token) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("username", response.data.username);
+        return response.data;
       }
-      return response.data;
+      throw new Error(ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS);
     } catch (error) {
-      console.error("Login error:", error.response?.data || error.message);
-      throw error;
+      throw handleAuthError(error);
     }
   },
 
   logout: () => {
+    // Clear all auth-related items from localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("username");
+
+    // Clear any other session/user data you might have
+    localStorage.removeItem("selectedTab");
+    console.log("User logged out and localStorage cleared.");
   },
 
   isAuthenticated: () => {

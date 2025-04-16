@@ -1,8 +1,6 @@
 import { useState } from "react";
 import StudentList from "@components/modules/student/StudentList";
 import StudentDetails from "@components/modules/student/StudentDetails";
-// import StudentList from "../../components/modules/student/StudentList";
-// import StudentDetails from "../../components/modules/student/StudentDetails";
 
 const Student = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);

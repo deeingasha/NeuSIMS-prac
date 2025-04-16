@@ -99,7 +99,7 @@ const StudentDetails = ({ student }) => {
         <div className="border rounded p-4">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="font-semibold text-lg">{student.name}</h2>
+              <h2 className="font-semibold text-lg mb-4">{student.name}</h2>
               <p>Admission No: {student.admNo}</p>
             </div>
             <div className="w-24 h-24 border rounded bg-gray-200 flex items-center justify-center">

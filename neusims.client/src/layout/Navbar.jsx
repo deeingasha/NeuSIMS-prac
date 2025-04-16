@@ -3,13 +3,16 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { TABS } from "../config/MenuConfig";
 import { useMenu } from "../context/MenuContext";
+import { authService } from "../services/authService";
 
 const Navbar = () => {
   const { selectedTab, setSelectedTab } = useMenu();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Perform any logout logic here (e.g., clearing tokens)
+    // Execute logout logic
+    authService.logout();
+    // Then navigate to login page
     navigate("/login");
   };
 

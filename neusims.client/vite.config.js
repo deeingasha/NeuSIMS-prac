@@ -57,12 +57,14 @@ export default defineConfig({
         new URL("./src/components", import.meta.url)
       ),
       "@services": fileURLToPath(new URL("./src/services", import.meta.url)),
+      "@utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
       "@layout": fileURLToPath(new URL("./src/layout", import.meta.url)),
     },
   },
   server: {
     proxy: {
-        "^/api": {  // Change from /weatherforecast to /api
+      "^/api": {
+        // Change from /weatherforecast to /api
         target,
         secure: false,
       },

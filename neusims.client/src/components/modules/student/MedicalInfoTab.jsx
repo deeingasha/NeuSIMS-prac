@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-const MedicalInfoTab = () => {
+const MedicalInfoTab = ({ formData, handleChange }) => {
   return (
     <div className="p-4 bg-white rounded-lg shadow-md text-xs">
       <h2 className="text-sm font-semibold mb-2">Medical Information</h2>
@@ -12,10 +13,14 @@ const MedicalInfoTab = () => {
             <label className="w-40">Disability:</label>
             <input
               type="text"
+              name="disability"
+              value={formData.disability || ""}
+              onChange={handleChange}
               className="input input-xs w-full border border-gray-300"
             />
           </div>
 
+          {/* TODO remove this fields not in api */}
           <div className="flex items-center gap-2">
             <label className="w-40">Medical Problems:</label>
             <select className="select select-xs w-full border border-gray-300">
@@ -73,6 +78,12 @@ const MedicalInfoTab = () => {
       </div>
     </div>
   );
+};
+MedicalInfoTab.propTypes = {
+  formData: PropTypes.shape({
+    disability: PropTypes.string,
+  }).isRequired,
+  handleChange: PropTypes.func.isRequired,
 };
 
 export default MedicalInfoTab;

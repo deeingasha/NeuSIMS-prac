@@ -1,9 +1,14 @@
 import { useState } from "react";
 import StudentList from "@components/modules/student/StudentList";
 import StudentDetails from "@components/modules/student/StudentDetails";
+import { studentService } from "../../services/studentService"; // Adjust the import path as necessary
 
 const Student = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
+
+  // const [students, setStudents] = useState([/* initial data */]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Dummy Student Data (Replace with API later)
   const students = [
@@ -216,11 +221,36 @@ const Student = () => {
       payrollNo: "",
     },
   ];
+  // Add save handler without modifying the dummy data
+  const handleSave = async (studentData) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // Log the data being sent to API
+      console.log("Attempting to save student:", studentData);
+
+      // Call your save API
+      const response = await studentService.saveStudent(studentData);
+      console.log("Save response:", response);
+
+      // Show success message (you can add a toast notification here)
+      alert("Student saved successfully!");
+    } catch (error) {
+      console.error("Save error:", error);
+      setError(error.message || "Failed to save student");
+      throw error; // Propagate error back to child component
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex p-4 h-full">
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+      {isLoading && <div className="text-blue-500 mb-4">Saving...</div>}
       <StudentList students={students} onSelect={setSelectedStudent} />
-      <StudentDetails student={selectedStudent} />
+      <StudentDetails student={selectedStudent} onSave={handleSave} />
     </div>
   );
 };

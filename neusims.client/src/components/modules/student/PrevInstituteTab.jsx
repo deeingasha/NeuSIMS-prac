@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-const PrevInstituteTab = () => {
+const PrevInstituteTab = ({ formData, handleChange }) => {
   return (
     <div className="p-4 space-y-4 border rounded-lg shadow-md bg-white text-xs">
       <div className="grid grid-cols-1 gap-4">
@@ -11,6 +12,9 @@ const PrevInstituteTab = () => {
           </label>
           <input
             type="text"
+            name="prevInstitute"
+            value={formData.prevInstitute || ""}
+            onChange={handleChange}
             className="input input-xs w-full border border-gray-300 rounded-md"
             placeholder="Enter previous institute name"
           />
@@ -23,6 +27,9 @@ const PrevInstituteTab = () => {
           </label>
           <input
             type="text"
+            name="lastAttended"
+            value={formData.lastAttended || ""}
+            onChange={handleChange}
             className="input input-xs w-full border border-gray-300 rounded-md"
             placeholder="Enter last attended class"
           />
@@ -34,6 +41,9 @@ const PrevInstituteTab = () => {
             Remarks
           </label>
           <textarea
+            name="prevRemark"
+            value={formData.prevRemark || ""}
+            onChange={handleChange}
             className="textarea textarea-xs w-full border border-gray-300 rounded-md"
             rows="4"
             placeholder="Enter any remarks"
@@ -42,6 +52,14 @@ const PrevInstituteTab = () => {
       </div>
     </div>
   );
+};
+PrevInstituteTab.propTypes = {
+  formData: PropTypes.shape({
+    prevInstitute: PropTypes.string,
+    lastAttended: PropTypes.string,
+    prevRemark: PropTypes.string,
+  }).isRequired,
+  handleChange: PropTypes.func.isRequired,
 };
 
 export default PrevInstituteTab;

@@ -103,6 +103,22 @@ const PersonalDetailsTab = ({ formData, handleChange }) => {
               className="input input-xs w-full border border-gray-300"
             />
           </div>
+          <div className="flex items-center gap-2">
+            <label className="w-40 font-medium">
+              Gender<span className="text-red-500">*</span>:
+            </label>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="select select-xs w-full border border-gray-300"
+              required
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
 
           <div
             className="border border-gray-300 rounded-md p-2 relative mx-auto mt-18"
@@ -315,6 +331,7 @@ PersonalDetailsTab.propTypes = {
     middleName: PropTypes.string,
     lastName: PropTypes.string,
     dob: PropTypes.string,
+    gender: PropTypes.string,
     status: PropTypes.string,
     country: PropTypes.string,
     nationality: PropTypes.string,

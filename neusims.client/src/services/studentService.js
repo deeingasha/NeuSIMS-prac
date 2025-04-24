@@ -105,14 +105,24 @@ export const studentService = {
     }
   },
 
-  // Add methods for getting student data
-  getStudent: async (entityNo) => {
+  getStudentsList: async () => {
     try {
-      const response = await api.get(`/api/Entity/GetEntity/${entityNo}`);
+      const response = await api.get("/Entity/GetEntities");
       return response.data;
     } catch (error) {
       throw new Error(
-        error.response?.data?.message || "Failed to fetch student"
+        error.response?.data?.message || "Failed to fetch students list"
+      );
+    }
+  },
+
+  getStudent: async (entityNo) => {
+    try {
+      const response = await api.get(`/Entity/GetEntity/${entityNo}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch student details"
       );
     }
   },

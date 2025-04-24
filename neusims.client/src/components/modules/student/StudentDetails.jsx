@@ -6,31 +6,79 @@ import MedicalInfoTab from "./MedicalInfoTab";
 import PrevInstituteTab from "./PrevInstituteTab";
 import { studentService } from "@services/studentService";
 
-const StudentDetails = ({ student, onSave }) => {
+const StudentDetails = ({ student = null, onSave }) => {
   const [activeTab, setActiveTab] = useState("Personal Details");
   const [formData, setFormData] = useState({
+    // Match database fields
+    entityNo: 0,
+    entityType: "STD",
     title: "",
     firstName: "",
     middleName: "",
     lastName: "",
+    idType: "STD",
+    idNo: "",
     dob: "",
     gender: "",
-    status: "",
-    country: "",
+    disability: "",
     nationality: "",
+    poBox: "",
+    address1: "",
+    address2: "",
+    phoneNo2: "",
+    emailId: "",
     remarks: "",
     academicYear: "",
     dateOfJoining: "",
-    classAllocation: "",
-    statusDate: "",
     isBoarding: false,
     isSponsored: false,
+    transport: "N",
     busNo: "",
     transportArea: "",
     house: "",
     nemisNo: "",
-    isStaffParent: false,
-    payrollNo: "",
+    status: "Active",
+    statusCode: 1,
+    // Guardian fields
+    guardian1: "",
+    guardian1Firstname: "",
+    guardian1Lastname: "",
+    relation1: "",
+    guardian1IdNo: "",
+    guardian1Tel1: "",
+    guardian1WTel: "",
+    guardianPhone1: "",
+    guardian1Email: "",
+    guardian1Email2: "",
+    guardian1Occupation: "",
+    guardian1Company: "",
+    guardian1CompanyAddress: "",
+    guardian1Fax: "",
+    guardian1Residence: "",
+    guardian2: "",
+    guardian2Firstname: "",
+    guardian2Lastname: "",
+    relation2: "",
+    guardian2IdNo: "",
+    guardian2Tel1: "",
+    guardian2WTel: "",
+    guardianPhone2: "",
+    guardian2Email: "",
+    guardian2Email2: "",
+    guardian2Occupation: "",
+    guardian2Company: "",
+    guardian2CompanyAddress: "",
+    guardian2Fax: "",
+    guardian2Residence: "",
+    // Emergency contact fields
+    emergencyName: "",
+    emergencyRelation: "",
+    emergencyHomePhone: "",
+    emergencyWorkPhone: "",
+    // Previous Institute fields
+    prevInstitute: "",
+    lastAttended: "",
+    prevRemark: "",
   });
 
   const [isSaving, setIsSaving] = useState(false);
@@ -38,30 +86,72 @@ const StudentDetails = ({ student, onSave }) => {
 
   useEffect(() => {
     if (student) {
-      const nameParts = student.name.split(" ");
+      console.log("Raw student data:", JSON.stringify(student, null, 2)); // Add this to debug
       setFormData({
+        entityNo: student.entityNo || 0,
+        entityType: student.entityType || "STD",
         title: student.title || "",
-        firstName: student.firstName || "",
-        middleName: student.middleName || "",
-        lastName: student.lastName || "",
-        dob: student.dob || "",
-        gender: student.gender || "",
-        status: student.status || "",
-        country: student.country || "",
+        firstName: student.fName || "",
+        middleName: student.mName || "",
+        lastName: student.lName || "",
+        idType: student.idType || "STD",
+        idNo: student.idNo || "",
+        dob: student.dob
+          ? new Date(student.dob).toISOString().split("T")[0]
+          : "",
+        gender: student.sex || "",
         nationality: student.nationality || "",
-        remarks: student.remarks || "",
-        academicYear: student.academicYear || "",
-        dateOfJoining: student.dateOfJoining || "",
-        classAllocation: student.classAllocation || "",
-        statusDate: student.statusDate || "",
-        isBoarding: student.isBoarding || false,
-        isSponsored: student.isSponsored || false,
-        busNo: student.busNo || "",
+        poBox: student.poBox || "",
+        address1: student.address1 || "",
+        address2: student.address2 || "",
+        phoneNo2: student.phoneNo2 || "",
+        emailId: student.emailId || "",
+
+        remark: student.remark || "",
+        academicYear: student.year || "",
+        dateOfJoining: student.doj
+          ? new Date(student.doj).toISOString().split("T")[0]
+          : "",
+        isBoarding: student.boarding === "Y",
+        isSponsored: student.sponsored === "Y",
+        transport: student.transport || "N",
+        busNo: student.busNo?.toString() || "",
         transportArea: student.transportArea || "",
         house: student.house || "",
         nemisNo: student.nemisNo || "",
+        status: student.statusCode === 1 ? "Active" : "Inactive",
+        statusCode: student.statusCode || 1,
         isStaffParent: student.isStaffParent || false,
-        payrollNo: student.payrollNo || "",
+        payrollNo: student.payrollNo || "", //TODO show
+        // guardian fields
+        guardian1: student.guardian1 || "",
+        guardian1Firstname: student.guardian1Firstname || "",
+        guardian1Lastname: student.guardian1Lastname || "",
+        relation1: student.relation1 || "",
+        guardian1IdNo: student.guardian1IdNo || "",
+        guardian1Tel1: student.guardian1Tel1 || "",
+        guardian1WTel: student.guardian1WTel || "",
+        guardianPhone1: student.guardianPhone1 || "",
+        guardian1Residence: student.guardian1Residence || "",
+        guardian2: student.guardian2 || "",
+        guardian2Firstname: student.guardian2Firstname || "",
+        guardian2Lastname: student.guardian2Lastname || "",
+        relation2: student.relation2 || "",
+        guardian2IdNo: student.guardian2IdNo || "",
+        guardian2Residence: student.guardian2Residence || "",
+        emergencyName: student.emergencyName || "",
+        emergencyRelation: student.emergencyRelation || "",
+        emergencyHomePhone: student.emergencyHomePhone || "",
+        emergencyWorkPhone: student.emergencyWorkPhone || "",
+
+        //previous institute fields
+        prevInstitute: student.prevInstitute || "",
+        lastAttended: student.lastAttended || "",
+        prevRemark: student.prevRemark || "",
+
+        // medical information fields
+        disability: student.disability || "",
+        // ...student
       });
     }
   }, [student]);
@@ -126,8 +216,12 @@ const StudentDetails = ({ student, onSave }) => {
           <div className="border rounded p-4">
             <div className="flex justify-between items-start">
               <div>
-                <h2 className="font-semibold text-lg mb-4">{student.name}</h2>
-                <p>Admission No: {student.admNo}</p>
+                <h2 className="font-semibold text-lg mb-4">
+                  {`${formData.firstName || ""} ${formData.middleName || ""} ${
+                    formData.lastName || ""
+                  }`.trim() || "New Student"}
+                </h2>
+                <p>Student No: {formData.entityNo || "Pending"}</p>
               </div>
               <div className="w-24 h-24 border rounded bg-gray-200 flex items-center justify-center">
                 <span className="text-gray-500">Photo</span>
@@ -178,31 +272,76 @@ const StudentDetails = ({ student, onSave }) => {
 
 StudentDetails.propTypes = {
   student: PropTypes.shape({
-    admNo: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
+    entityNo: PropTypes.number,
+    entityType: PropTypes.string,
     title: PropTypes.string,
-    firstName: PropTypes.string,
-    middleName: PropTypes.string,
-    lastName: PropTypes.string,
+    fName: PropTypes.string,
+    mName: PropTypes.string,
+    lName: PropTypes.string,
+    idType: PropTypes.string,
+    idNo: PropTypes.string,
     dob: PropTypes.string,
-    gender: PropTypes.string,
-    status: PropTypes.string,
-    country: PropTypes.string,
+    sex: PropTypes.string,
+    disability: PropTypes.string,
     nationality: PropTypes.string,
-    remarks: PropTypes.string,
-    academicYear: PropTypes.string,
-    dateOfJoining: PropTypes.string,
-    classAllocation: PropTypes.string,
-    statusDate: PropTypes.string,
-    isBoarding: PropTypes.bool,
-    isSponsored: PropTypes.bool,
-    busNo: PropTypes.string,
+    poBox: PropTypes.string,
+    address1: PropTypes.string,
+    address2: PropTypes.string,
+    phoneNo2: PropTypes.string,
+    emailId: PropTypes.string,
+    remark: PropTypes.string,
+    year: PropTypes.string,
+    doj: PropTypes.string,
+    boarding: PropTypes.string,
+    transport: PropTypes.string,
+    busNo: PropTypes.number,
+    sponsored: PropTypes.string,
     transportArea: PropTypes.string,
     house: PropTypes.string,
     nemisNo: PropTypes.string,
-    isStaffParent: PropTypes.bool,
-    payrollNo: PropTypes.string,
-  }).isRequired,
+    statusCode: PropTypes.number,
+    // Guardian fields
+    guardian1: PropTypes.string,
+    guardian1Firstname: PropTypes.string,
+    guardian1Lastname: PropTypes.string,
+    relation1: PropTypes.string,
+    guardian1IdNo: PropTypes.string,
+    guardian1Tel1: PropTypes.string,
+    guardian1WTel: PropTypes.string,
+    guardianPhone1: PropTypes.string,
+    guardian1Email: PropTypes.string,
+    guardian1Email2: PropTypes.string,
+    guardian1Occupation: PropTypes.string,
+    guardian1Company: PropTypes.string,
+    guardian1CompanyAddress: PropTypes.string,
+    guardian1Fax: PropTypes.string,
+    guardian1Residence: PropTypes.string,
+    // Guardian 2 fields
+    guardian2: PropTypes.string,
+    guardian2Firstname: PropTypes.string,
+    guardian2Lastname: PropTypes.string,
+    relation2: PropTypes.string,
+    guardian2IdNo: PropTypes.string,
+    guardian2Tel1: PropTypes.string,
+    guardian2WTel: PropTypes.string,
+    guardianPhone2: PropTypes.string,
+    guardian2Email: PropTypes.string,
+    guardian2Email2: PropTypes.string,
+    guardian2Occupation: PropTypes.string,
+    guardian2Company: PropTypes.string,
+    guardian2CompanyAddress: PropTypes.string,
+    guardian2Fax: PropTypes.string,
+    guardian2Residence: PropTypes.string,
+    // Emergency contact fields
+    emergencyName: PropTypes.string,
+    emergencyRelation: PropTypes.string,
+    emergencyHomePhone: PropTypes.string,
+    emergencyWorkPhone: PropTypes.string,
+    // Previous Institute fields
+    prevInstitute: PropTypes.string,
+    lastAttended: PropTypes.string,
+    prevRemark: PropTypes.string,
+  }),
   onSave: PropTypes.func.isRequired,
 };
 

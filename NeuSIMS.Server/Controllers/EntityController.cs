@@ -10,9 +10,15 @@ namespace NeuSIMS.Server.Controllers
     public class EntityController : Controller
     {
         IConfiguration _config;
+        private readonly string _connectionString;
+
         public EntityController(IConfiguration config)
+
         {
             _config = config;
+            // Get connection string once in constructor
+            _connectionString = _config.GetSection("Configuration")?["ConnectionString"]
+               ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found in configuration.");
         }
 
 
@@ -48,9 +54,6 @@ namespace NeuSIMS.Server.Controllers
                 }
 
                 entity.EntityNo = EntityNo1;
-
-
-
 
                 // Execute SaveEntity stored procedure
                 using (var cmd = new SqlCommand("SaveEntity", conn))
@@ -142,6 +145,145 @@ namespace NeuSIMS.Server.Controllers
                 }
 
             }
+
+        }
+
+        [HttpGet("GetEntities")]
+        public async Task<IActionResult> GetEntities()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("GetStudentsList", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            var students = new List<object>();
+                            while (await reader.ReadAsync())
+                            {
+                                students.Add(new
+                                {
+                                    entityNo = reader.GetInt32(reader.GetOrdinal("EntityNo")),
+                                    fName = reader.IsDBNull(reader.GetOrdinal("FName")) ? "" : reader.GetString(reader.GetOrdinal("FName")),
+                                    mName = reader.IsDBNull(reader.GetOrdinal("MName")) ? "" : reader.GetString(reader.GetOrdinal("MName")),
+                                    lName = reader.IsDBNull(reader.GetOrdinal("LName")) ? "" : reader.GetString(reader.GetOrdinal("LName"))
+                                });
+                            }
+                            return Ok(students);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+        [HttpGet("GetEntity/{entityNo}")]
+        public async Task<IActionResult> GetEntity(int entityNo)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("GetEntityByNo", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@EntityNo", entityNo);
+
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                var student = new Entity
+                                {
+                                    EntityNo = reader.GetInt32(reader.GetOrdinal("EntityNo")),
+                                    EntityType = reader.GetString(reader.GetOrdinal("EntityType")),
+                                    Title = reader.IsDBNull(reader.GetOrdinal("Title")) ? "" : reader.GetString(reader.GetOrdinal("Title")),
+                                    FName = reader.IsDBNull(reader.GetOrdinal("FName")) ? "" : reader.GetString(reader.GetOrdinal("FName")),
+                                    MName = reader.IsDBNull(reader.GetOrdinal("MName")) ? "" : reader.GetString(reader.GetOrdinal("MName")),
+                                    LName = reader.IsDBNull(reader.GetOrdinal("LName")) ? "" : reader.GetString(reader.GetOrdinal("LName")),
+                                    DOB = reader.GetDateTime(reader.GetOrdinal("DOB")),
+                                    Sex = reader.IsDBNull(reader.GetOrdinal("Sex")) ? "" : reader.GetString(reader.GetOrdinal("Sex")),
+                                    Disability = reader.IsDBNull(reader.GetOrdinal("Disability")) ? "" : reader.GetString(reader.GetOrdinal("Disability")),
+                                    Guardian1 = reader.IsDBNull(reader.GetOrdinal("Guardian1")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1")),
+                                    Relation1 = reader.IsDBNull(reader.GetOrdinal("Relation1")) ? "" : reader.GetString(reader.GetOrdinal("Relation1")),
+                                    Guardian2 = reader.IsDBNull(reader.GetOrdinal("Guardian2")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2")),
+                                    Relation2 = reader.IsDBNull(reader.GetOrdinal("Relation2")) ? "" : reader.GetString(reader.GetOrdinal("Relation2")),
+                                    PoBox = reader.IsDBNull(reader.GetOrdinal("PoBox")) ? "" : reader.GetString(reader.GetOrdinal("PoBox")),
+                                    Address1 = reader.IsDBNull(reader.GetOrdinal("Address1")) ? "" : reader.GetString(reader.GetOrdinal("Address1")),
+                                    Address2 = reader.IsDBNull(reader.GetOrdinal("Address2")) ? "" : reader.GetString(reader.GetOrdinal("Address2")),
+                                    PhoneNo2 = reader.IsDBNull(reader.GetOrdinal("PhoneNo2")) ? "" : reader.GetString(reader.GetOrdinal("PhoneNo2")),
+                                    EmailId = reader.IsDBNull(reader.GetOrdinal("EmailId")) ? "" : reader.GetString(reader.GetOrdinal("EmailId")),
+                                    Remark = reader.IsDBNull(reader.GetOrdinal("Remark")) ? "" : reader.GetString(reader.GetOrdinal("Remark")),
+                                    UpdatedUser = reader.IsDBNull(reader.GetOrdinal("UpdatedUser")) ? "" : reader.GetString(reader.GetOrdinal("UpdatedUser")),
+                                    UpdatedDate = reader.GetDateTime(reader.GetOrdinal("UpdatedDate")),
+                                    CountryNo = reader.GetInt32(reader.GetOrdinal("CountryNo")),
+                                    ProvinceNo = reader.GetInt32(reader.GetOrdinal("ProvinceNo")),
+                                    AreaNo = reader.GetInt32(reader.GetOrdinal("AreaNo")),
+                                    Year = reader.IsDBNull(reader.GetOrdinal("Year")) ? "" : reader.GetString(reader.GetOrdinal("Year")),
+                                    DOJ = reader.GetDateTime(reader.GetOrdinal("DOJ")),
+                                    Boarding = reader.IsDBNull(reader.GetOrdinal("Boarding")) ? "" : reader.GetString(reader.GetOrdinal("Boarding")),
+                                    Nationality = reader.IsDBNull(reader.GetOrdinal("Nationality")) ? "" : reader.GetString(reader.GetOrdinal("Nationality")),
+                                    PrevInstitute = reader.IsDBNull(reader.GetOrdinal("PrevInstitute")) ? "" : reader.GetString(reader.GetOrdinal("PrevInstitute")),
+                                    LastAttended = reader.IsDBNull(reader.GetOrdinal("LastAttended")) ? "" : reader.GetString(reader.GetOrdinal("LastAttended")),
+                                    PrevRemark = reader.IsDBNull(reader.GetOrdinal("PrevRemark")) ? "" : reader.GetString(reader.GetOrdinal("PrevRemark")),
+                                    StatusCode = reader.GetInt32(reader.GetOrdinal("StatusCode")),
+                                    Guardian1WTel = reader.IsDBNull(reader.GetOrdinal("Guardian1WTel")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1WTel")),
+                                    Guardian2WTel = reader.IsDBNull(reader.GetOrdinal("Guardian2WTel")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2WTel")),
+                                    GuardianPhone1 = reader.IsDBNull(reader.GetOrdinal("GuardianPhone1")) ? "" : reader.GetString(reader.GetOrdinal("GuardianPhone1")),
+                                    GuardianPhone2 = reader.IsDBNull(reader.GetOrdinal("GuardianPhone2")) ? "" : reader.GetString(reader.GetOrdinal("GuardianPhone2")),
+                                    Guardian1Email = reader.IsDBNull(reader.GetOrdinal("Guardian1Email")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1Email")),
+                                    Guardian2Email = reader.IsDBNull(reader.GetOrdinal("Guardian2Email")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2Email")),
+                                    Guardian1Occupation = reader.IsDBNull(reader.GetOrdinal("Guardian1Occupation")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1Occupation")),
+                                    Guardian2Occupation = reader.IsDBNull(reader.GetOrdinal("Guardian2Occupation")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2Occupation")),
+                                    Guardian1Company = reader.IsDBNull(reader.GetOrdinal("Guardian1Company")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1Company")),
+                                    Guardian2Company = reader.IsDBNull(reader.GetOrdinal("Guardian2Company")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2Company")),
+                                    Guardian1CompanyAddress = reader.IsDBNull(reader.GetOrdinal("Guardian1CompanyAddress")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1CompanyAddress")),
+                                    Guardian2CompanyAddress = reader.IsDBNull(reader.GetOrdinal("Guardian2CompanyAddress")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2CompanyAddress")),
+                                    Guardian1Firstname = reader.IsDBNull(reader.GetOrdinal("Guardian1Firstname")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1Firstname")),
+                                    Guardian1Lastname = reader.IsDBNull(reader.GetOrdinal("Guardian1Lastname")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1Lastname")),
+                                    Guardian2Firstname = reader.IsDBNull(reader.GetOrdinal("Guardian2Firstname")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2Firstname")),
+                                    Guardian2Lastname = reader.IsDBNull(reader.GetOrdinal("Guardian2Lastname")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2Lastname")),
+                                    Guardian1IdNo = reader.IsDBNull(reader.GetOrdinal("Guardian1IdNo")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1IdNo")),
+                                    Guardian2IdNo = reader.IsDBNull(reader.GetOrdinal("Guardian2IdNo")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2IdNo")),
+                                    Guardian1Tel1 = reader.IsDBNull(reader.GetOrdinal("Guardian1Tel1")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1Tel1")),
+                                    Guardian2Tel1 = reader.IsDBNull(reader.GetOrdinal("Guardian2Tel1")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2Tel1")),
+                                    Guardian1Fax = reader.IsDBNull(reader.GetOrdinal("Guardian1Fax")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1Fax")),
+                                    Guardian2Fax = reader.IsDBNull(reader.GetOrdinal("Guardian2Fax")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2Fax")),
+                                    Guardian1Residence = reader.IsDBNull(reader.GetOrdinal("Guardian1Residence")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1Residence")),
+                                    Guardian2Residence = reader.IsDBNull(reader.GetOrdinal("Guardian2Residence")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2Residence")),
+                                    Guardian1Email2 = reader.IsDBNull(reader.GetOrdinal("Guardian1Email2")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1Email2")),
+                                    Guardian2Email2 = reader.IsDBNull(reader.GetOrdinal("Guardian2Email2")) ? "" : reader.GetString(reader.GetOrdinal("Guardian2Email2")),
+                                    Transport = reader.IsDBNull(reader.GetOrdinal("Transport")) ? "" : reader.GetString(reader.GetOrdinal("Transport")),
+                                    BusNo = reader.GetInt32(reader.GetOrdinal("BusNo")),
+                                    Sponsored = reader.IsDBNull(reader.GetOrdinal("Sponsored")) ? "" : reader.GetString(reader.GetOrdinal("Sponsored")),
+                                    StaffNo = reader.IsDBNull(reader.GetOrdinal("StaffNo")) ? "" : reader.GetString(reader.GetOrdinal("StaffNo")),
+                                    EmgName = reader.IsDBNull(reader.GetOrdinal("EmgName")) ? "" : reader.GetString(reader.GetOrdinal("EmgName")),
+                                    EmgRelation = reader.IsDBNull(reader.GetOrdinal("EmgRelation")) ? "" : reader.GetString(reader.GetOrdinal("EmgRelation")),
+                                    EmgHomePhone = reader.IsDBNull(reader.GetOrdinal("EmgHomePhone")) ? "" : reader.GetString(reader.GetOrdinal("EmgHomePhone")),
+                                    EmgWorkPhone = reader.IsDBNull(reader.GetOrdinal("EmgWorkPhone")) ? "" : reader.GetString(reader.GetOrdinal("EmgWorkPhone")),
+                                    TransportArea = reader.IsDBNull(reader.GetOrdinal("TransportArea")) ? "" : reader.GetString(reader.GetOrdinal("TransportArea")),
+                                    House = reader.IsDBNull(reader.GetOrdinal("House")) ? "" : reader.GetString(reader.GetOrdinal("House")),
+                                    NemisNo = reader.IsDBNull(reader.GetOrdinal("NemisNo")) ? "" : reader.GetString(reader.GetOrdinal("NemisNo"))
+                                };
+                                return Ok(student);
+                            }
+                            return NotFound($"Student with EntityNo {entityNo} not found");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+
 
         }
     }

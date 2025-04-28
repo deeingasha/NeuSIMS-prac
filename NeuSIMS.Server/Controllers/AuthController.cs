@@ -179,55 +179,69 @@ namespace NeuSIMS.Server.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        //         //----------Update password------
+        [HttpPost("UpdatePassword")]
+        public IActionResult UpdatePassword([FromBody] UpdatePassword entity)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "Invalid input data", errors = ModelState });
+            }
 
-        //         [HttpPost("UpdatePassword")]
-        //         public IActionResult UpdatePassword([FromBody] UpdatePassword entity1)
-        //         {
-        //             try
-        //             {
-        //                 int rowsAffected = 0;
-        //                 string connStr = _config.GetSection("Configuration").GetSection("ConnectionString").Value;
+            string connStr = _config.GetSection("Configuration").GetSection("ConnectionString").Value;
 
-        //                 using (SqlConnection conn = new SqlConnection(connStr))
-        //                 {
-        //                     conn.Open();
-        //                     using (SqlCommand cmd = new SqlCommand("UpdatePassword", conn))
-        //                     {
-        //                         cmd.CommandType = CommandType.StoredProcedure;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connStr))
+                {
+                    conn.Open();
 
-        //                         cmd.Parameters.Add("@EntityNo", SqlDbType.Int).Value = entity1.EntityNo;
-        //                         cmd.Parameters.Add("@Secretword", SqlDbType.VarChar, 255).Value = entity1.Secretword;
-        //                         cmd.Parameters.Add("@Password", SqlDbType.VarChar, 255).Value = entity1.Password;
+                    // First verify the secret word matches
+                    var verifyCmd = new SqlCommand(
+                        "SELECT COUNT(*) FROM m_User WHERE pfn_Entity_No = @EntityNo AND v_Secretword = @SecretWord",
+                        conn
+                    );
+                    verifyCmd.Parameters.AddWithValue("@EntityNo", entity.EntityNo);
+                    verifyCmd.Parameters.AddWithValue("@SecretWord", entity.Secretword);
 
-        //                         // Add output parameter
-        //                         SqlParameter outputParam = new SqlParameter("@RowsAffected", SqlDbType.Int)
-        //                         {
-        //                             Direction = ParameterDirection.Output
-        //                         };
-        //                         cmd.Parameters.Add(outputParam);
+                    int matches = (int)verifyCmd.ExecuteScalar();
+                    if (matches == 0)
+                    {
+                        return BadRequest(new { message = "Invalid secret word" });
+                    }
 
-        //                         cmd.ExecuteNonQuery();
+                    // Hash the new password
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(entity.Password);
 
-        //                         // Get the value from the output parameter
-        //                         rowsAffected = (int)cmd.Parameters["@RowsAffected"].Value;
+                    // Update the password
+                    var updateCmd = new SqlCommand(@"
+                UPDATE m_User 
+                SET v_Password = @Password,
+                    d_Updated_Date = GETDATE()
+                WHERE pfn_Entity_No = @EntityNo
+                AND v_Secretword = @SecretWord", conn);
 
-        //                         if (rowsAffected > 0)
-        //                         {
-        //                             return Ok(new { message = "Password updated successfully" });
-        //                         }
-        //                         else
-        //                         {
-        //                             return BadRequest(new { message = "No matching record found, or update failed" });
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //             catch (Exception ex)
-        //             {
-        //                 return StatusCode(500, new { message = "Data saving failed", error = ex.Message });
-        //             }
-        //         }
+                    updateCmd.Parameters.AddWithValue("@Password", hashedPassword);
+                    updateCmd.Parameters.AddWithValue("@EntityNo", entity.EntityNo);
+                    updateCmd.Parameters.AddWithValue("@SecretWord", entity.Secretword);
+
+                    int rowsAffected = updateCmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                    {
+                        return Ok(new { message = "Password updated successfully" });
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = "Password update failed" });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Password update error: {ex.Message}");
+                return StatusCode(500, new { message = "Error updating password", error = ex.Message });
+            }
+        }
 
     }
 }

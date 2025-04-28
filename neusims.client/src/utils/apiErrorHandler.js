@@ -3,6 +3,7 @@ export class ApiError extends Error {
     super(message);
     this.statusCode = statusCode;
     this.type = type;
+    this.isApiError = true; // Custom property to identify API errors
   }
 }
 

@@ -40,6 +40,22 @@ export const authService = {
   isAuthenticated: () => {
     return !!localStorage.getItem("token");
   },
+
+  updatePassword: async (entityNo, secretWord, newPassword) => {
+    try {
+      const response = await api.post("/auth/UpdatePassword", {
+        entityNo: entityNo,
+        secretword: secretWord,
+        password: newPassword,
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+      throw new Error("Failed to update password. Please try again.");
+    }
+  },
   //login: async (credentials) => {
   //  try {
   //      const response = await api.post("/api/Login/Authentication", credentials);

@@ -174,7 +174,10 @@ const Login = () => {
                   />
                   <span className="text-sm">Remember Me</span>
                 </label>
-                <a href="#" className="text-blue-600 text-sm">
+                <a 
+                  onClick={() => navigate('/forgot-password')} 
+                  className="text-blue-600 text-sm cursor-pointer"
+                >
                   Forgot password?
                 </a>
               </div>

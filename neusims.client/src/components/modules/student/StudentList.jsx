@@ -80,9 +80,9 @@ const StudentList = ({ students = [], onSelect, isLoading }) => {
                 {filteredStudents.map((student, index) => (
                   <tr
                     key={student.entityNo}
-                    className={`hover:bg-gray-100 cursor-pointer ${
+                    className={`hover cursor-pointer ${
                       selectedStudent?.entityNo === student.entityNo
-                        ? "bg-blue-50"
+                        ? "selected"
                         : ""
                     }`}
                     onClick={() => handleStudentSelect(student)}

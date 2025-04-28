@@ -175,7 +175,7 @@ const AddClassBooks = () => {
         {/* Left Panel - Books Table */}
         <div className="border rounded-lg p-4 shadow">
           <div className="table-container">
-            <table className="table table-xs w-full">
+            <table className="table table-xs table-zebra w-full">
               <thead>
                 <tr>
                   <th className="w-12">#</th>
@@ -189,8 +189,8 @@ const AddClassBooks = () => {
                   <tr
                     key={book.id}
                     onClick={() => handleRowClick(book)}
-                    className={`hover:bg-gray-100 cursor-pointer ${
-                      selectedBookId === book.id ? "bg-blue-50" : ""
+                    className={`hover : cursor-pointer ${
+                      selectedBookId === book.id ? "selected" : ""
                     }`}
                   >
                     <td className="text-center">{index + 1}</td>

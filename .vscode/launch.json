@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/NeuSIMS.Server/bin/Debug/net8.0/NeuSIMS.Server.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/NeuSIMS.Server",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://localhost:7255;http://localhost:5292"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "Launch React Client",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/neusims.client",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev"]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack: React + .NET",
+            "configurations": [".NET Core Launch (web)", "Launch React Client"]
+        }
+    ]
+}

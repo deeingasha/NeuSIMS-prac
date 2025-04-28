@@ -1,6 +1,22 @@
+###
+# This file defines HTTP endpoints for the NeuSIMS.Server application.
+# It is used to specify and document the HTTP routes, methods, and 
+# associated handlers for the server. 
+# Allows use of VS Code with the "REST Client" extension to test your APIs 
+# directly from the editor.
+### 
 @NeuSIMS.Server_HostAddress = http://localhost:5292
 
-GET {{NeuSIMS.Server_HostAddress}}/weatherforecast/
-Accept: application/json
 
-###
+### Login
+POST {{NeuSIMS.Server_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "test@example.com",
+    "password": "password123"
+}
+
+### Get Students List
+GET {{NeuSIMS.Server_HostAddress}}/api/entity/GetEntities
+Authorization: Bearer {{authToken}}

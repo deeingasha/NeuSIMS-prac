@@ -260,14 +260,23 @@ const StudentDetails = ({ student = null, onSave }) => {
             </div>
           </div>
           <div className="mt-4 flex justify-end gap-2">
-            {saveError && <p className="text-red-500 text-sm">{saveError}</p>}
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="btn btn-primary btn-sm"
-            >
-              {isSaving ? "Saving..." : "Save"}
-            </button>
+            {saveError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-600">
+                <div className="flex items-center gap-2">
+                  <span>❌</span>
+                  <span>{saveError}</span>
+                </div>
+              </div>
+            )}
+            <div className="flex justify-end gap-2">
+              <button
+                type="submit"
+                disabled={isSaving}
+                className="btn btn-primary btn-sm"
+              >
+                {isSaving ? "Saving..." : "Save"}
+              </button>
+            </div>
           </div>
         </form>
       ) : (

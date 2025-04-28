@@ -55,22 +55,28 @@ const Student = () => {
   };
 
   return (
-    <div className="flex p-4 h-full">
+    <div className="flex flex-col p-4 h-full">
       {error && (
-        <div className="text-red-500 mb-4 fixed top-4 right-4 z-50">
-          {error}
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+          <div className="flex items-center gap-2 text-red-600">
+            <span>❌</span>
+            <span>{error}</span>
+          </div>
         </div>
       )}
-      <StudentList
-        students={students}
-        onSelect={handleStudentSelect}
-        isLoading={isLoading}
-      />
-      <StudentDetails
-        student={selectedStudent || null} //always show StudentDetails even if null
-        onSave={handleSave}
-        isLoading={isLoading}
-      />
+      <div className="flex flex-1">
+        <StudentList
+          students={students}
+          onSelect={handleStudentSelect}
+          isLoading={isLoading}
+          error={error} // Pass error to StudentList
+        />
+        <StudentDetails
+          student={selectedStudent || null} //always show StudentDetails even if null
+          onSave={handleSave}
+          isLoading={isLoading}
+        />
+      </div>
     </div>
   );
 };

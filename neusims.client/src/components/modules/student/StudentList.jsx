@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const StudentList = ({ students = [], onSelect, isLoading }) => {
+const StudentList = ({ students = [], onSelect, isLoading, error }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -67,8 +67,13 @@ const StudentList = ({ students = [], onSelect, isLoading }) => {
           {/* Table container */}
           {isLoading ? (
             <div className="text-center py-4">Loading students...</div>
+          ) : error ? (
+            <div className="text-center py-4 text-red-600">
+              <div className="mb-2">❌</div>
+              {error}
+            </div>
           ) : (
-            <table className="table table-xs table-zebra ">
+            <table className="table table-xs table-zebra">
               <thead className="sticky top-0 bg-gray-50 z-10">
                 <tr>
                   <th className="w-6">#</th>
@@ -114,5 +119,6 @@ StudentList.propTypes = {
   ).isRequired,
   onSelect: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  error: PropTypes.string, // Add error prop type
 };
 export default StudentList;

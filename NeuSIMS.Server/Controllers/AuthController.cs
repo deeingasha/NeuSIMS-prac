@@ -178,5 +178,56 @@ namespace NeuSIMS.Server.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        //         //----------Update password------
+
+        //         [HttpPost("UpdatePassword")]
+        //         public IActionResult UpdatePassword([FromBody] UpdatePassword entity1)
+        //         {
+        //             try
+        //             {
+        //                 int rowsAffected = 0;
+        //                 string connStr = _config.GetSection("Configuration").GetSection("ConnectionString").Value;
+
+        //                 using (SqlConnection conn = new SqlConnection(connStr))
+        //                 {
+        //                     conn.Open();
+        //                     using (SqlCommand cmd = new SqlCommand("UpdatePassword", conn))
+        //                     {
+        //                         cmd.CommandType = CommandType.StoredProcedure;
+
+        //                         cmd.Parameters.Add("@EntityNo", SqlDbType.Int).Value = entity1.EntityNo;
+        //                         cmd.Parameters.Add("@Secretword", SqlDbType.VarChar, 255).Value = entity1.Secretword;
+        //                         cmd.Parameters.Add("@Password", SqlDbType.VarChar, 255).Value = entity1.Password;
+
+        //                         // Add output parameter
+        //                         SqlParameter outputParam = new SqlParameter("@RowsAffected", SqlDbType.Int)
+        //                         {
+        //                             Direction = ParameterDirection.Output
+        //                         };
+        //                         cmd.Parameters.Add(outputParam);
+
+        //                         cmd.ExecuteNonQuery();
+
+        //                         // Get the value from the output parameter
+        //                         rowsAffected = (int)cmd.Parameters["@RowsAffected"].Value;
+
+        //                         if (rowsAffected > 0)
+        //                         {
+        //                             return Ok(new { message = "Password updated successfully" });
+        //                         }
+        //                         else
+        //                         {
+        //                             return BadRequest(new { message = "No matching record found, or update failed" });
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             catch (Exception ex)
+        //             {
+        //                 return StatusCode(500, new { message = "Data saving failed", error = ex.Message });
+        //             }
+        //         }
+
     }
 }

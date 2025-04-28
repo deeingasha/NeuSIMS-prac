@@ -7,6 +7,10 @@ import PrevInstituteTab from "./PrevInstituteTab";
 import { studentService } from "@services/studentService";
 
 const StudentDetails = ({ student = null, onSave }) => {
+  // Add debug logging right at component start
+  // console.log("=== StudentDetails Component ===");
+  // console.log("Initial student prop:", student);
+
   const [activeTab, setActiveTab] = useState("Personal Details");
   const [formData, setFormData] = useState({
     // Match database fields
@@ -85,6 +89,9 @@ const StudentDetails = ({ student = null, onSave }) => {
   const [saveError, setSaveError] = useState(null);
 
   useEffect(() => {
+    // Debugging: Log the student prop when it changes
+    // console.log("=== useEffect triggered ===");
+    // console.log("Student data received:", student);
     if (student) {
       console.log("Raw student data:", JSON.stringify(student, null, 2)); // Add this to debug
       setFormData({
@@ -139,10 +146,10 @@ const StudentDetails = ({ student = null, onSave }) => {
         relation2: student.relation2 || "",
         guardian2IdNo: student.guardian2IdNo || "",
         guardian2Residence: student.guardian2Residence || "",
-        emergencyName: student.emergencyName || "",
-        emergencyRelation: student.emergencyRelation || "",
-        emergencyHomePhone: student.emergencyHomePhone || "",
-        emergencyWorkPhone: student.emergencyWorkPhone || "",
+        emergencyName: student.emgName || "",
+        emergencyRelation: student.emgRelation || "",
+        emergencyHomePhone: student.emgHomePhone || "",
+        emergencyWorkPhone: student.emgWorkPhone || "",
 
         //previous institute fields
         prevInstitute: student.prevInstitute || "",
@@ -172,7 +179,7 @@ const StudentDetails = ({ student = null, onSave }) => {
     try {
       const studentData = {
         ...formData,
-        entityNo: student?.admNo || 0, // For new vs existing students
+        entityNo: formData.entityNo || 0, // Use existing entityNo for updates
         updatedUser: "currentUser", // TODO: Get from auth context
       };
       // Just pass data to parent i.e Student.jsx

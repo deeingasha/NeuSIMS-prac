@@ -66,13 +66,11 @@ const Student = () => {
         onSelect={handleStudentSelect}
         isLoading={isLoading}
       />
-      {selectedStudent && (
-        <StudentDetails
-          student={selectedStudent}
-          onSave={handleSave}
-          isLoading={isLoading}
-        />
-      )}
+      <StudentDetails
+        student={selectedStudent || null} //always show StudentDetails even if null
+        onSave={handleSave}
+        isLoading={isLoading}
+      />
     </div>
   );
 };

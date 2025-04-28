@@ -34,28 +34,28 @@ namespace NeuSIMS.Server.Controllers
             {
                 conn.Open();
 
-                // Get next EntityNo
-                int EntityNo1;
-                using (var cmd2 = new SqlCommand("SELECT ISNULL(MAX(pn_Entity_No), 0) AS maxEntityNo FROM dbo.m_Student_Entity", conn))
+                // Only get next EntityNo if this is a new entity (EntityNo = 0)
+                if (entity.EntityNo == 0)
                 {
-                    cmd2.CommandType = CommandType.Text;
-                    using (SqlDataReader reader = cmd2.ExecuteReader())
+                    using (var cmd2 = new SqlCommand("SELECT ISNULL(MAX(pn_Entity_No), 0) AS maxEntityNo FROM dbo.m_Student_Entity", conn))
                     {
-                        if (reader.Read())
+                        cmd2.CommandType = CommandType.Text;
+                        using (SqlDataReader reader = cmd2.ExecuteReader())
                         {
-                            var maxEntityNo = reader["maxEntityNo"];
-                            EntityNo1 = (maxEntityNo != DBNull.Value ? Convert.ToInt32(maxEntityNo) : 0) + 1;
-                        }
-                        else
-                        {
-                            EntityNo1 = 1; // Default if no records exist
+                            if (reader.Read())
+                            {
+                                var maxEntityNo = reader["maxEntityNo"];
+                                entity.EntityNo = (maxEntityNo != DBNull.Value ? Convert.ToInt32(maxEntityNo) : 0) + 1;
+                            }
+                            else
+                            {
+                                entity.EntityNo = 1; // Default if no records exist
+                            }
                         }
                     }
                 }
 
-                entity.EntityNo = EntityNo1;
-
-                // Execute SaveEntity stored procedure
+                // Execute SaveEntity stored procedure (handles both insert and update)
                 using (var cmd = new SqlCommand("SaveEntity", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -141,7 +141,11 @@ namespace NeuSIMS.Server.Controllers
 
                     cmd.ExecuteNonQuery();
                     conn.Close();
-                    return new JsonResult(entity);
+                    return Ok(new
+                    {
+                        message = entity.EntityNo == 0 ? "Student created successfully" : "Student updated successfully",
+                        entity = entity
+                    });
                 }
 
             }
@@ -209,6 +213,8 @@ namespace NeuSIMS.Server.Controllers
                                     MName = reader.IsDBNull(reader.GetOrdinal("MName")) ? "" : reader.GetString(reader.GetOrdinal("MName")),
                                     LName = reader.IsDBNull(reader.GetOrdinal("LName")) ? "" : reader.GetString(reader.GetOrdinal("LName")),
                                     DOB = reader.GetDateTime(reader.GetOrdinal("DOB")),
+                                    IdType = reader.IsDBNull(reader.GetOrdinal("IdType")) ? "" : reader.GetString(reader.GetOrdinal("IdType")),
+                                    IdNo = reader.IsDBNull(reader.GetOrdinal("IdNo")) ? "" : reader.GetString(reader.GetOrdinal("IdNo")),
                                     Sex = reader.IsDBNull(reader.GetOrdinal("Sex")) ? "" : reader.GetString(reader.GetOrdinal("Sex")),
                                     Disability = reader.IsDBNull(reader.GetOrdinal("Disability")) ? "" : reader.GetString(reader.GetOrdinal("Disability")),
                                     Guardian1 = reader.IsDBNull(reader.GetOrdinal("Guardian1")) ? "" : reader.GetString(reader.GetOrdinal("Guardian1")),

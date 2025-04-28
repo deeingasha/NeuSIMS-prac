@@ -12,22 +12,30 @@ const StudentList = ({ students = [], onSelect, isLoading }) => {
 
   const filteredStudents = students.filter(
     (student) =>
-      student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      `${student.fName} ${student.mName} ${student.lName}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
       student.entityNo?.toString().includes(searchTerm)
   );
 
   return (
-    <div className="border rounded-lg p-4 shadow w-1/3 bg-gray-50">
-      <h2 className="font-semibold text-lg mb-4">Active Students</h2>
-      {/* <div className="space-y-4 mb-4"> */}
-      <input
-        type="text"
-        placeholder="Search by name or number"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="input input-xs w-full border border-gray-300 rounded mb-2"
-      />
-      {/* <div className="overflow-y-auto max-h-[60vh]">
+    // <div className="flex flex-col h-full border rounded p-4 shadow w-1/3 bg-gray-50">
+    <div className="flex flex-col w-1/3 h-full overflow-hidden">
+      {" "}
+      {/* Base container */}
+      <div className="flex flex-col h-full p-4 bg-gray-50 border rounded shadow">
+        {" "}
+        {/* Content container */}
+        <h2 className="font-semibold text-lg mb-2">Active Students</h2>
+        {/* <div className="space-y-4 mb-4"> */}
+        <input
+          type="text"
+          placeholder="Search by name or number"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="input input-xs w-full border border-gray-300 rounded mb-2"
+        />
+        {/* <div className="overflow-y-auto max-h-[60vh]">
         <table className="table table-xs table-zebra w-full text-xs">
           <thead>
             <tr>
@@ -53,39 +61,43 @@ const StudentList = ({ students = [], onSelect, isLoading }) => {
           </tbody>
         </table>
       </div> */}
-      <div className="table-container">
-        {isLoading ? (
-          <div className="text-center py-4">Loading students...</div>
-        ) : (
-          <table className="table table-xs w-full">
-            <thead>
-              <tr>
-                <th className="w-12">#</th>
-                <th>Student No</th>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredStudents.map((student, index) => (
-                <tr
-                  key={student.entityNo}
-                  className={`hover:bg-gray-100 cursor-pointer ${
-                    selectedStudent?.entityNo === student.entityNo
-                      ? "bg-blue-50"
-                      : ""
-                  }`}
-                  onClick={() => handleStudentSelect(student)}
-                >
-                  <td className="text-center">{index + 1}</td>
-                  <td>{student.entityNo}</td>
-                  <td>
-                    {`${student.fName} ${student.mName} ${student.lName}`.trim()}
-                  </td>
+        {/* <div className="flex-1 overflow-auto min-h-0"> */}
+        <div className="flex-1 overflow-auto">
+          {" "}
+          {/* Table container */}
+          {isLoading ? (
+            <div className="text-center py-4">Loading students...</div>
+          ) : (
+            <table className="table table-xs table-zebra ">
+              <thead className="sticky top-0 bg-gray-50 z-10">
+                <tr>
+                  <th className="w-6">#</th>
+                  <th>STD No</th>
+                  <th>Name</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              </thead>
+              <tbody className="overflow-auto">
+                {filteredStudents.map((student, index) => (
+                  <tr
+                    key={student.entityNo}
+                    className={`hover:bg-gray-100 cursor-pointer ${
+                      selectedStudent?.entityNo === student.entityNo
+                        ? "bg-blue-50"
+                        : ""
+                    }`}
+                    onClick={() => handleStudentSelect(student)}
+                  >
+                    <td className="text-center">{index + 1}</td>
+                    <td>{student.entityNo}</td>
+                    <td>
+                      {`${student.fName} ${student.mName} ${student.lName}`.trim()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     </div>
   );

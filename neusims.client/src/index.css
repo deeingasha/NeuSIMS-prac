@@ -16,15 +16,20 @@ body {
 
 /* Global table styles */
 .table {
-  @apply border-collapse border-2 border-gray-800;
+  @apply border-collapse border-2 border-gray-800 text-xs;
   counter-reset: rowNumber;
   /* flex: 1; Allow the table to grow and fill the container */
+}
+/* Header styles */
+.table thead {
+  @apply sticky top-0 bg-gray-50;
 }
 
 .table th {
   @apply bg-gray-200 border border-gray-800 font-semibold px-2 py-1;
 }
 
+/* Cell styles */
 .table td {
   @apply border border-gray-300 px-2 py-1;
 }
@@ -40,8 +45,27 @@ body {
 }
 
 /* Zebra striping */
+
 .table.table-zebra tbody tr:nth-child(even) {
-  @apply bg-gray-50;
+  @apply bg-gray-100;
+}
+/* Row hover and selection states */
+.table tbody tr:hover {
+  @apply bg-gray-100;
+}
+
+.table tbody tr.selected {
+  @apply bg-blue-500;
+}
+
+/* Sizing variants */
+.table.table-xs {
+  @apply text-xs;
+}
+
+.table.table-xs th,
+.table.table-xs td {
+  @apply px-2 py-1;
 }
 
 /* Numbered column styles */

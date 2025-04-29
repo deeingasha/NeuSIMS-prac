@@ -49,6 +49,11 @@ const target = env.ASPNETCORE_HTTPS_PORT
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/",
+  build: {
+    outDir: "../NeuSIMS.Server/wwwroot",
+    emptyOutDir: true,
+  },
   plugins: [plugin()],
   resolve: {
     alias: {

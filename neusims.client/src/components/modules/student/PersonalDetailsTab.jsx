@@ -16,11 +16,13 @@ const PersonalDetailsTab = ({ formData, handleChange }) => {
             </label>
             <select
               name="academicYear"
-              value={formData.academicYear}
+              value={formData.academicYear || ""}
               onChange={handleChange}
               className="select select-xs w-full border border-gray-300"
               required
+              autoComplete="off"
             >
+              <option value="">Select Year</option>
               <option>2025</option>
               <option>2024</option>
               <option>2023</option>
@@ -47,10 +49,11 @@ const PersonalDetailsTab = ({ formData, handleChange }) => {
               value={formData.title}
               onChange={handleChange}
               className="select select-xs w-full border border-gray-300"
-              required
+              // required
             >
-              <option>Mr.</option>
+              <option value="">Select Title</option>
               <option>Miss</option>
+              <option>Mr</option>
             </select>
           </div>
 
@@ -247,6 +250,7 @@ const PersonalDetailsTab = ({ formData, handleChange }) => {
               onChange={handleChange}
               className="select select-xs w-full border border-gray-300"
             >
+              <option value="">Select</option>
               <option>Area 1</option>
               <option>Area 2</option>
             </select>
@@ -260,6 +264,7 @@ const PersonalDetailsTab = ({ formData, handleChange }) => {
               onChange={handleChange}
               className="select select-xs w-full border border-gray-300"
             >
+              <option value="">Select</option>
               <option>Red</option>
               <option>Blue</option>
             </select>

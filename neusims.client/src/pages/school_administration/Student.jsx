@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import StudentList from "@components/modules/student/StudentList";
 import StudentDetails from "@components/modules/student/StudentDetails";
-import { studentService } from "../../services/studentService"; // Adjust the import path as necessary
+import { studentService } from "../../services/studentService";
 
 const Student = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [isDetailLoading, setIsDetailLoading] = useState(false); // New Loading state to limit reloads
 
   const [students, setStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,13 +28,32 @@ const Student = () => {
       setIsLoading(false);
     }
   };
+
   const handleStudentSelect = async (student) => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);  -- Removed to prevent multiple loadings
+      if (!student) {
+        // Handle new student - clear selection and show empty form
+        setSelectedStudent({
+          entityNo: 0,
+          entityType: "STD",
+          statusCode: 1,
+          // Add minimal required fields for a new student
+        });
+        return;
+      }
+
+      if (student.entityNo === 0) {
+        // Already a new student template
+        setSelectedStudent(student);
+        return;
+      }
+
+      setIsDetailLoading(true); // Use the separate loading state
       const fullStudentData = await studentService.getStudent(student.entityNo);
       setSelectedStudent(fullStudentData);
     } catch (error) {
-      console.error("Failed to fetch student details:", error);
+      // console.error("Failed to fetch student details:", error);
       setError("Failed to load student details");
     } finally {
       setIsLoading(false);
@@ -44,13 +64,14 @@ const Student = () => {
       setIsLoading(true);
       setError(null);
       await studentService.saveStudent(studentData);
-      fetchStudents(); // Refresh list after save
+      // Only fetch students after saving
+      await fetchStudents();
     } catch (error) {
       console.error("Save error:", error);
       setError(error.message || "Failed to save student");
       throw error;
     } finally {
-      setIsLoading(false);
+      setIsDetailLoading(false);
     }
   };
 
@@ -68,13 +89,14 @@ const Student = () => {
         <StudentList
           students={students}
           onSelect={handleStudentSelect}
-          isLoading={isLoading}
+          isLoading={isLoading} // This is now only for list loading
           error={error} // Pass error to StudentList
+          selectedStudent={selectedStudent} // Pass selected student
         />
         <StudentDetails
           student={selectedStudent || null} //always show StudentDetails even if null
           onSave={handleSave}
-          isLoading={isLoading}
+          isLoading={isDetailLoading} // Use the separate loading state
         />
       </div>
     </div>

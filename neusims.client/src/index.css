@@ -6,6 +6,10 @@
 body {
   font-family: "Poppins", san-serif;
 }
+.btn-primary {
+  @apply bg-purple-800 text-white font-semibold py-2 px-4 rounded;
+}
+
 /* Table container styles */
 .table-container {
   @apply border rounded-lg p-4;

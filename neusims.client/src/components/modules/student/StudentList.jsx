@@ -1,21 +1,34 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 
-const StudentList = ({ students = [], onSelect, isLoading, error }) => {
-  const [selectedStudent, setSelectedStudent] = useState(null);
+const StudentList = ({
+  students = [],
+  onSelect,
+  isLoading,
+  error,
+  selectedStudent,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Use prop for selectedStudent
   const handleStudentSelect = (student) => {
-    setSelectedStudent(student);
     onSelect(student);
   };
+  const handleNewStudent = () => {
+    onSelect(null); // Pass null to parent
+  };
 
-  const filteredStudents = students.filter(
-    (student) =>
-      `${student.fName} ${student.mName} ${student.lName}`
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      student.entityNo?.toString().includes(searchTerm)
+  // Memoize filtered students
+  const filteredStudents = useMemo(
+    () =>
+      students.filter(
+        (student) =>
+          `${student.fName} ${student.mName} ${student.lName}`
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          student.entityNo?.toString().includes(searchTerm)
+      ),
+    [students, searchTerm] // Only recompute when these change
   );
 
   return (
@@ -26,7 +39,12 @@ const StudentList = ({ students = [], onSelect, isLoading, error }) => {
       <div className="flex flex-col h-full p-4 bg-gray-50 border rounded shadow">
         {" "}
         {/* Content container */}
-        <h2 className="font-semibold text-lg mb-2">Active Students</h2>
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="font-semibold text-lg mb-2">Active Students</h2>
+          <button onClick={handleNewStudent} className="btn btn-primary btn-sm">
+            New Student
+          </button>
+        </div>
         {/* <div className="space-y-4 mb-4"> */}
         <input
           type="text"
@@ -109,16 +127,18 @@ const StudentList = ({ students = [], onSelect, isLoading, error }) => {
 };
 
 StudentList.propTypes = {
-  students: PropTypes.arrayOf(
-    PropTypes.shape({
-      entityNo: PropTypes.number.isRequired,
-      fName: PropTypes.string,
-      mName: PropTypes.string,
-      lName: PropTypes.string,
-    })
-  ).isRequired,
+  // students: PropTypes.arrayOf(
+  //   PropTypes.shape({
+  //     entityNo: PropTypes.number.isRequired,
+  //     fName: PropTypes.string,
+  //     mName: PropTypes.string,
+  //     lName: PropTypes.string,
+  //   })
+  // ).isRequired,
+  students: PropTypes.array,
   onSelect: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   error: PropTypes.string, // Add error prop type
+  selectedStudent: PropTypes.object,
 };
 export default StudentList;

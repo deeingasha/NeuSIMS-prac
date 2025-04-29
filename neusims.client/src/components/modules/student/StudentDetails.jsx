@@ -7,10 +7,6 @@ import PrevInstituteTab from "./PrevInstituteTab";
 import { studentService } from "@services/studentService";
 
 const StudentDetails = ({ student = null, onSave }) => {
-  // Add debug logging right at component start
-  // console.log("=== StudentDetails Component ===");
-  // console.log("Initial student prop:", student);
-
   const [activeTab, setActiveTab] = useState("Personal Details");
   const [formData, setFormData] = useState({
     // Match database fields
@@ -87,13 +83,15 @@ const StudentDetails = ({ student = null, onSave }) => {
 
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState(null);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
-    // Debugging: Log the student prop when it changes
-    // console.log("=== useEffect triggered ===");
-    // console.log("Student data received:", student);
     if (student) {
-      console.log("Raw student data:", JSON.stringify(student, null, 2)); // Add this to debug
+      // Reset to Personal Details tab when creating new student or changing students
+      if (student.entityNo === 0 || !student.entityNo) {
+        setActiveTab("Personal Details");
+      }
+
       setFormData({
         entityNo: student.entityNo || 0,
         entityType: student.entityType || "STD",
@@ -175,6 +173,7 @@ const StudentDetails = ({ student = null, onSave }) => {
     e.preventDefault();
     setIsSaving(true);
     setSaveError(null);
+    setSaveSuccess(false);
 
     try {
       const studentData = {
@@ -185,6 +184,9 @@ const StudentDetails = ({ student = null, onSave }) => {
       // Just pass data to parent i.e Student.jsx
       if (onSave) {
         await onSave(studentData);
+        setSaveSuccess(true);
+        // Auto-hide success message after 3 seconds
+        setTimeout(() => setSaveSuccess(false), 3000);
       }
     } catch (error) {
       setSaveError(error.message);
@@ -218,6 +220,24 @@ const StudentDetails = ({ student = null, onSave }) => {
 
   return (
     <div className="w-2/3 p-2">
+      {/* Show messages at the top of the form */}
+      {/* {(saveSuccess || saveError) && (
+        <div
+          className={`mb-4 p-4 rounded-md ${
+            saveSuccess
+              ? "bg-green-50 border border-green-200"
+              : "bg-red-50 border border-red-200"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <span>{saveSuccess ? "✅" : "❌"}</span>
+            <span className={saveSuccess ? "text-green-700" : "text-red-700"}>
+              {saveSuccess ? "Student saved successfully!" : saveError}
+            </span>
+          </div>
+        </div>
+      )} */}
+
       {student ? (
         <form onSubmit={handleSave} className="border rounded p-4">
           <div className="border rounded p-4">
@@ -260,27 +280,57 @@ const StudentDetails = ({ student = null, onSave }) => {
             </div>
           </div>
           <div className="mt-4 flex justify-end gap-2">
-            {saveError && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-600">
-                <div className="flex items-center gap-2">
-                  <span>❌</span>
-                  <span>{saveError}</span>
-                </div>
-              </div>
-            )}
-            <div className="flex justify-end gap-2">
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="btn btn-primary btn-sm"
-              >
-                {isSaving ? "Saving..." : "Save"}
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={isSaving}
+              className={`btn btn-primary btn-sm ${
+                isSaving ? "opacity-50" : ""
+              }`}
+            >
+              {isSaving ? (
+                <span className="flex items-center gap-2">
+                  <span className="loading loading-spinner"></span>
+                  Saving...
+                </span>
+              ) : (
+                "Save"
+              )}
+            </button>
           </div>
         </form>
       ) : (
-        <p className="text-gray-500">Select a student to view details.</p>
+        <div className="flex flex-col items-center justify-center h-full text-gray-500">
+          <p>Select a student to view details</p>
+          <p>or click &quot;New Student&quot; to add one.</p>
+        </div>
+      )}
+
+      {/* Move messages to fixed position at bottom */}
+      {(saveSuccess || saveError) && (
+        <div
+          className={`fixed bottom-4 right-4 max-w-md p-4 rounded-md shadow-lg ${
+            saveSuccess
+              ? "bg-green-50 border border-green-200"
+              : "bg-red-50 border border-red-200"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <span>{saveSuccess ? "✅" : "❌"}</span>
+            <span className={saveSuccess ? "text-green-700" : "text-red-700"}>
+              {saveSuccess ? "Student saved successfully!" : saveError}
+            </span>
+            {/* Close button */}
+            <button
+              onClick={() => {
+                setSaveSuccess(false);
+                setSaveError(null);
+              }}
+              className="ml-auto text-gray-500 hover:text-gray-700"
+            >
+              ×
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

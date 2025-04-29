@@ -61,11 +61,11 @@ namespace NeuSIMS.Server.Controllers
                     v_User_Name,
                     v_Password,
                     fn_Role_No,
-                    v_User_Status  -- Added this field
+                    v_User_Status  
                 ) VALUES (
                     @username,
                     @password,
-                    8,
+                    8, --TODO change this
                     1
                 )", conn);
                     insertCmd.Parameters.AddWithValue("@username", user.Username);
@@ -78,9 +78,6 @@ namespace NeuSIMS.Server.Controllers
             }
             catch (Exception ex)
             {
-                // Console.WriteLine($"Error during signup: {ex.Message}");
-                // return StatusCode(500, new { message = "Error registering user", error = ex.Message });
-                Console.WriteLine($"SQL Error: {ex.Message}");
                 return StatusCode(500, new { message = "Database error", error = ex.Message });
             }
         }

@@ -134,11 +134,6 @@ namespace NeuSIMS.Server.Controllers
                     cmd.Parameters.Add("@EntityType", SqlDbType.VarChar).Value = entity.EntityType;
 
 
-                    foreach (SqlParameter p in cmd.Parameters)
-                    {
-                        Console.WriteLine($"{p.ParameterName}: {p.Value} ({p.Value?.GetType()})");
-                    }
-
                     cmd.ExecuteNonQuery();
                     conn.Close();
                     return Ok(new

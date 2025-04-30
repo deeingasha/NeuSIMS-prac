@@ -1,6 +1,40 @@
+/**
+ * FeeReceiptDetails Page
+ *
+ * Purpose:
+ * - Manages fee payment receipts and statements
+ * - Handles payment processing and history
+ * - Provides fee statement generation
+ *
+ * Component Hierarchy:
+ * ├── FeeReceiptDetails (this file)
+ * │   ├── FeeReceiptTab - Payment processing
+ * │   └── ViewFeeStatement - Statement generation (planned)
+ *
+ * State Management:
+ * - activeTab: Controls active view (receipt/statement)
+ * - topFilters: Manages filter selections
+ * - FilterField: Reusable filter component
+ *
+ * Data Flow:
+ * 1. Top filters affect data display
+ * 2. Refresh triggers data reload
+ * 3. Tab switch changes content view
+ *
+ * To Modify:
+ * 1. Add new payment modes:
+ * 2. Implement ViewFeeStatement:
+ * 3. Add receipt customization:
+ *    - Add receipt template selection
+ *    - Implement print formatting
+ *    - Add digital signature support
+ * 4. Enhance filtering:
+ *    - Add date range selection
+ *    - Include payment mode filters
+ *    - Add student search
+ */
 import { useState } from "react";
 import FeeReceiptTab from "@components/modules/finance/FeeReceiptTab";
-// import FeeReceiptTab from "../../components/finance/FeeReceiptTab";
 
 const FeeReceipt = () => {
   const [activeTab, setActiveTab] = useState("feeReceipt");

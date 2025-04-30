@@ -1,9 +1,24 @@
-// src/pages/FeeSelection.jsx
+/**
+ * FeeSelection Page
+ * 
+ * Purpose:
+ * - Manages student fee assignments and modifications
+ * - Provides interface for both fresh and term-wise fee selection
+ * - Centralizes fee selection workflow
+ * 
+ * Component Hierarchy:
+ * ├── FeeSelection (this file)
+ * │   ├── StudentFeeSelection - New fee assignments
+ * │   └── EditFeeSelection - Modify existing assignments
+ * 
+ * 
+ * To Modify:
+ * 1. Add new filters: 
+ * 2. Add API integration:
+ */
 import { useState } from "react";
 import StudentFeeSelection from "@components/modules/finance/StudentFeeSelection";
 import EditFeeSelection from "@components/modules/finance/EditFeeSelection";
-// import StudentFeeSelection from "../../components/finance/StudentFeeSelection";
-// import EditFeeSelection from "../../components/finance/EditFeeSElection";
 
 const FeeSelection = () => {
   const [activeTab, setActiveTab] = useState("feeSelection");

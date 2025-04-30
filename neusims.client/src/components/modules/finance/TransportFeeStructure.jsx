@@ -1,3 +1,23 @@
+/**
+ * TransportFeeStructure Component
+ *
+ * Purpose:
+ * - Manages and displays transport fee rates by area and academic year
+ * - Provides structure for transport fee calculations used in fee selection
+ *
+ * Connections:
+ * ├── Parent: FinanceSettings.jsx - Renders this as configuration tab
+ * ├── Related: TransportAreas.jsx - Provides area definitions
+ * └── Used By:
+ *     ├── StudentFeeSelection.jsx - For initial transport fee setup
+ *     └── EditFeeSelection.jsx - For modifying transport fees
+ *
+ * To Modify:
+ * 1. Replace mock data with API calls:
+ * 2. Add CRUD operations:
+ * 4. Validation:
+ */
+
 import { useState } from "react";
 
 const TransportFeeStructure = () => {
@@ -5,6 +25,7 @@ const TransportFeeStructure = () => {
   const [academicYear, setAcademicYear] = useState("2025");
 
   // Mock data for the transport fee structure table
+  // TODO: Replace with API call
   const [transportFees] = useState([
     { area: "Westlands and surrounding areas", amount: 25000 },
     { area: "Kilimani and Kileleshwa", amount: 20000 },

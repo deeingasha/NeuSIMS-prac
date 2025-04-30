@@ -1,12 +1,29 @@
+/**
+ * FinanceSettings Page
+ *
+ * Purpose:
+ * - Manages all finance configuration and master data
+ * - Central hub for fee structure setup
+ *
+ * Tab Structure:
+ * - FeeNames: Define fee types and properties
+ * - FeeStructure: Set fee amounts by class/year
+ * - TransportAreas: Configure transport zones and rates
+ *
+ * Data Flow:
+ * 1. FeeNames defines available fee types
+ * 2. FeeStructure uses these types to set amounts
+ * 3. FeeSelection uses structure for student assignment
+ *
+ * To Modify:
+ * 1. Add new configuration tabs as needed
+ */
+
 import { useState } from "react";
 import FeeNames from "@components/modules/finance/FeeNames";
 import FeeStructure from "@components/modules/finance/FeeStructure";
 import TransportArea from "@components/modules/finance/TransportArea";
 import TransportFeeStructure from "@components/modules/finance/TransportFeeStructure";
-// import FeeNames from "../../components/finance/FeeNames";
-// import FeeStructure from "../../components/finance/FeeStructure";
-// import TransportArea from "../../components/finance/TransportArea";
-// import TransportFeeStructure from "../../components/finance/TransportFeeStructure";
 
 const FinanceSettings = () => {
   const [activeTab, setActiveTab] = useState("feeNames");

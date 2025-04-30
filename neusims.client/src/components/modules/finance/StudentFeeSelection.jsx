@@ -1,3 +1,26 @@
+/**
+ * StudentFeeSelection Component
+ *
+ * Purpose:
+ * - Handles initial fee assignment to students
+ * - Manages student-specific fee configurations
+ *
+ * Connections:
+ * - Parent: FeeSelection.jsx
+ * - Uses: FeeStructure.jsx for fee amounts
+ * - Related: EditFeeSelection.jsx for modifications
+ *
+ * Key Features:
+ * - Student fee assignment
+ * - Transport fee configuration
+ * - Sponsored student handling
+ * - Fee selection templates
+ *
+ * To Modify:
+ * 1. Add bulk assignment features
+ * 2. Implement fee templates
+ * 3. Add fee schedule configuration
+ */
 import { useState } from "react";
 import PropTypes from "prop-types";
 
@@ -63,7 +86,7 @@ const StudentFeeSelection = () => {
                       type="checkbox"
                       checked={student.selected}
                       onChange={() => {
-                        /* handle change */
+                        /*TODO: handle change */
                       }}
                       className="checkbox checkbox-xs"
                     />
@@ -103,7 +126,7 @@ const StudentFeeSelection = () => {
                   value="oneWay"
                   checked={transportDetails.type === "oneWay"}
                   onChange={() => {
-                    /* handle change */
+                    /*TODO: handle change */
                   }}
                   className="radio radio-xs"
                 />
@@ -116,7 +139,7 @@ const StudentFeeSelection = () => {
                   value="twoWay"
                   checked={transportDetails.type === "twoWay"}
                   onChange={() => {
-                    /* handle change */
+                    /*TODO:  handle change */
                   }}
                   className="radio radio-xs"
                 />
@@ -131,7 +154,7 @@ const StudentFeeSelection = () => {
                 className="input input-xs input-bordered flex-grow"
                 value={transportDetails.amount}
                 onChange={() => {
-                  /* handle change */
+                  /*TODO: handle change */
                 }}
               />
             </div>
@@ -159,7 +182,7 @@ const StudentFeeSelection = () => {
                       type="checkbox"
                       checked={fee.selected}
                       onChange={() => {
-                        /* handle change */
+                        /*TODO:  handle change */
                       }}
                       className="checkbox checkbox-xs"
                     />

@@ -1,7 +1,32 @@
+/**
+ * EditFeeSelection Component
+ *
+ * Purpose:
+ * - Allows editing of previously assigned student fee selections
+ * - Part of the fee selection workflow used by FeeSelection.jsx
+ * - Handles transport fee modifications for individual students
+ *
+ * Connections:
+ * - Parent: FeeSelection.jsx - Renders this as a tab alongside StudentFeeSelection
+ * - Related: StudentFeeSelection.jsx - Handles initial fee assignments
+ *
+ * Key Features:
+ * - Student list with sponsorship status
+ * - Transport fee configuration including one-way/two-way options
+ * - Amount calculations based on transport type
+ *
+ * To Modify:
+ * 1. Add API integration by replacing mock students array with fetchStudents()
+ * 2. Implement transport area options from TransportArea.jsx configurations
+ * 3. Add save/update handlers for persisting changes
+ * 4. Add validation and error handling
+ */
+
 import { useState } from "react";
 
 const EditFeeSelection = () => {
   const [students] = useState([
+    //TODO replace with api data
     { id: 1, admNo: "ADM001", name: "John Doe", sponsored: true },
     { id: 2, admNo: "ADM002", name: "Jane Smith", sponsored: false },
   ]);

@@ -1,3 +1,26 @@
+/**
+ * FeeNames Component
+ *
+ * Purpose:
+ * - Master data management for fee types and their properties
+ * - Foundation component for all fee-related operations
+ *
+ * Connections:
+ * - Used by: FinanceSettings.jsx as main tab
+ * - Referenced by: FeeStructure.jsx for fee definitions
+ * - Service: feeService.js handles API operations
+ *
+ * Key Features:
+ * - CRUD operations for fee types
+ * - Fee properties: name, frequency, mandatory/optional, refundable
+ * - Validation and error handling
+ *
+ * To Modify:
+ * 1. Uncomment API integration code when backend is ready
+ * 2. Add batch operations support by enabling pendingChanges state
+ * 3. Extend fee properties through formData state
+ */
+
 import { useState, useEffect } from "react";
 import { feeService } from "@services/feeService";
 import LoadingSpinner from "@components/LoadingSpinner";
@@ -136,13 +159,13 @@ const FeeNames = () => {
         // Add new fee
         const newFee = {
           //id: `temp_${Date.now()}`, // Temp ID for new fee
-          id: feeList.length + 1, // In real app, this would come from backend
+          id: feeList.length + 1, // TODO fetch from backend
           feeName: formData.feeName,
           payFrequency: formData.payFrequency,
           mandatory: formData.isMandatory ? "Yes" : "No",
           refundable: formData.isRefundable ? "Yes" : "No",
         };
-        // In real app, you'd make an API call here as
+        // TODO: Make an API call here:
         // add to pending creates
         // setPendingChanges((prev) => ({
         //   ...prev,
@@ -154,7 +177,6 @@ const FeeNames = () => {
         setFeeList([...feeList, newFee]);
       } else {
         // Update existing fee
-
         const updatedFeeList = feeList.map((fee) =>
           fee.id === selectedFeeId
             ? {
@@ -166,7 +188,7 @@ const FeeNames = () => {
               }
             : fee
         );
-        //  API call here
+        //  TODO: API call here
         // // Optimistically update the list
         // const updatedFee = {
         //   id: selectedFeeId,
@@ -204,7 +226,7 @@ const FeeNames = () => {
       console.error("Failed to save:", error);
     }
   };
-  // New method to handle batch saving of all changes
+  // New method to handle batch saving of all changes --experimental
   // const handleBatchSave = async () => {
   //   try {
   //     setLoading(true);
@@ -291,7 +313,7 @@ const FeeNames = () => {
 
   return (
     <div className="grid grid-cols-2 gap-4">
-      {/* Add the header with batch save button */}
+      {/*TODO:  Add the header with batch save button */}
       {/*{renderHeader()}*/}
 
       {/* Left Panel - Fee Names Table */}

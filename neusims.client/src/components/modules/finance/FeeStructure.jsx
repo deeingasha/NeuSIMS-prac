@@ -1,3 +1,25 @@
+/**
+ * FeeStructure Component
+ *
+ * Purpose:
+ * - Defines fee amounts for different academic years and classes
+ * - Uses fee types defined in FeeNames.jsx
+ *
+ * Connections:
+ * - Parent: FinanceSettings.jsx
+ * - Depends on: FeeNames.jsx for fee type definitions
+ * - Referenced by: StudentFeeSelection.jsx for fee amounts
+ *
+ * Key Features:
+ * - Year/class based fee structure configuration
+ * - Automatic total calculations
+ * - Fee amount management per fee type
+ *
+ * To Modify:
+ * 1. Add API integration for fee structure data
+ * 2. Implement copy structure feature between years
+ * 3. Add bulk import/export functionality
+ */
 import { useState } from "react";
 
 const FeeStructure = () => {
@@ -86,7 +108,7 @@ const FeeStructure = () => {
                   </td>
                 </tr>
               ))}
-              {/* Total Row */}
+              {/* TODO: Total Row */}
               {/* <tr className="font-bold">
                 <td className="border">Total</td>
                 <td className="border text-right">

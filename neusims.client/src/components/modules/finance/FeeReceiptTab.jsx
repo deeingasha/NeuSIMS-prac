@@ -1,3 +1,27 @@
+/**
+ * FeeReceiptTab Component
+ *
+ * Purpose:
+ * - Handles fee payment receipt generation and management
+ * - Processes different payment modes (cash/mpesa/bank)
+ *
+ * Connections:
+ * - Parent: FeeReceiptDetails.jsx
+ * - Uses: FeeStructure.jsx for fee amounts
+ *  - Uses: StudentFeeSelection for student fees
+ * - Service: receiptService.js for API operations
+ *
+ * Key Features:
+ * - Student fee payment processing
+ * - Multiple payment modes support
+ * - Receipt generation and cancellation
+ * - Balance tracking and calculations
+ *
+ * To Modify:
+ * 1. Integrate payment gateway APIs
+ * 2. Add receipt printing functionality
+ * 3. Implement error handling and validation
+ */
 import { useState } from "react";
 import PropTypes from "prop-types";
 

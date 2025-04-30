@@ -1,3 +1,22 @@
+/**
+ * TransportAreas Component
+ *
+ * Purpose:
+ * - Manages transport zones and their fee structures
+ * - Configures one-way/two-way transport rates
+ *
+ * Connections:
+ * - Parent: FinanceSettings.jsx
+ * - Used by: StudentFeeSelection.jsx, EditFeeSelection.jsx
+ *
+ * Features:
+ * - Zone CRUD operations
+ * - Rate configuration
+ * - Distance-based pricing
+ *
+ * To Modify:
+ * 1. TODO: put actual transport zones and details
+ */
 import { useState } from "react";
 
 const TransportArea = () => {
@@ -47,7 +66,7 @@ const TransportArea = () => {
 
   // Add handleSave function
   const handleSave = () => {
-    // Add save logic here
+    // TODO: Add save logic here
     setIsEditing(false);
   };
 

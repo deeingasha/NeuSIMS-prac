@@ -1,3 +1,22 @@
+/**
+ * PocketMoney Page
+ *
+ * Purpose:
+ * - Manages student pocket money accounts
+ * - Handles deposits and withdrawals
+ * - Generates pocket money statements
+ *
+ * API Integration Points:
+ * 1. Student List:
+ * 2. Transaction Processing:
+ * 3. Statement Generation:
+ *
+ * To Modify:
+ * 1. Add Transaction History:
+ * 2. Enhance Validation:
+ * 3. Add Features:
+ */
+
 import { useState } from "react";
 
 const PocketMoney = () => {
@@ -17,7 +36,7 @@ const PocketMoney = () => {
     description: "",
   });
 
-  // Mock students data
+  // Mock students data TODO replace with api call
   const [students] = useState([
     { id: 1, admNo: "ADM001", name: "John Doe" },
     { id: 2, admNo: "ADM002", name: "Jane Smith" },

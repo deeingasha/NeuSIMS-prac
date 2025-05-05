@@ -4,9 +4,7 @@ export const academicFilters = {
   getAcademicYears: async () => {
     try {
       console.log("Fetching academic years..."); // Debug logging
-      const response = await api.get(
-        "http://localhost:5292/api/AcademicFilters/GetAcademicYears"
-      );
+      const response = await api.get("AcademicFilters/GetAcademicYears");
       console.log("Academic years response:", response.data); // Debug logging
       // Transform the response data to match expected format
       return Array.isArray(response.data)

@@ -113,7 +113,14 @@ const StudentDetails = ({ student = null, onSave }) => {
         emailId: student.emailId || "",
 
         remark: student.remark || "",
-        academicYear: student.year || "",
+        //Class allocation
+        academicYear: student.currentAcademicYear || "",
+
+        classNo: student.currentClassNo || null, // Changed to match API response
+        streamNo: student.currentStreamNo || null,
+        streamName: student.currentStreamName || null,
+        className: student.currentClassName || null,
+
         dateOfJoining: student.doj
           ? new Date(student.doj).toISOString().split("T")[0]
           : "",

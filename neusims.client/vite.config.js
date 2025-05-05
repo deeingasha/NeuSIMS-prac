@@ -64,12 +64,15 @@ export default defineConfig({
       "@services": fileURLToPath(new URL("./src/services", import.meta.url)),
       "@utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
       "@layout": fileURLToPath(new URL("./src/layout", import.meta.url)),
+      "@hooks": fileURLToPath(new URL("./src/hooks", import.meta.url)),
+      "@context": fileURLToPath(new URL("./src/context", import.meta.url)),
     },
   },
   server: {
     proxy: {
       "^/api": {
         target,
+        changeOrigin: true, //critical for HTTPS proxying
         secure: false,
       },
     },

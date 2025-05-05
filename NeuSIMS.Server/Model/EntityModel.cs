@@ -80,6 +80,15 @@ namespace NeuSIMS.Server.Models
         public string? NemisNo { get; set; }
         public string? EntityType { get; set; }
 
+        //Class Allocation
+        public string? CurrentAcademicYear { get; set; }
+        public int? CurrentClassNo { get; set; }
+        public string? CurrentClassName { get; set; }
+        public int? CurrentStreamNo { get; set; }
+        public string? CurrentStreamName { get; set; }
+
+        public int? AllocationId { get; set; }
+
 
     }
 

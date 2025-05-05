@@ -24,93 +24,99 @@ import IssueBooks from "./pages/library/IssueBooks";
 import ReturnBooks from "./pages/library/ReturnBooks";
 import SendEmail from "./pages/email-sms/email-sendEmail";
 import ComingSoon from "./pages/ComingSoon";
+import { AcademicProvider } from "./context/AcademicContext";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+    <AcademicProvider>
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Protected Routes that use MainLayout */}
-        <Route
-          element={
-            <ProtectedRoute>
-              <MainLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="/" element={<Dashboard />} />
-          <Route path="registration/student" element={<Student />} />
+          {/* Protected Routes that use MainLayout */}
           <Route
-            path="class-allocation/student"
-            element={<StudentClassAllocation />}
-          />
-          <Route
-            path="class-allocation/staff"
-            element={<StaffClassAllocation />}
-          />
-          <Route
-            path="subject-allocation/student"
-            element={<StudentSubjectAllocation />}
-          />
-          <Route
-            path="subject-allocation/staff"
-            element={<StaffSubjectAllocation />}
-          />
-          <Route
-            path="exam/mark-entry-summary"
-            element={<MarkEntrySummary />}
-          />
-          <Route path="attendance/attendance" element={<StudentAttendance />} />
-          <Route
-            path="attendance/attendance-status"
-            element={<AttendanceStatus />}
-          />
-          <Route
-            path="finance-settings/finance-settings"
-            element={<FinanceSettings />}
-          />
-          <Route
-            path="fee-and-receipt-processing/fee-selection"
-            element={<FeeSelection />}
-          />
-          <Route
-            path="fee-and-receipt-processing/fee-receipt-details"
-            element={<FeeReceipt />}
-          />
-          <Route
-            path="/pocket-money-processing/pocket-money"
-            element={<PocketMoney />}
-          />
-          <Route
-            path="/library-settings/book-subjects"
-            element={<BookSubjects />}
-          />
-          <Route
-            path="/library-settings/add-material"
-            element={<MaterialType />}
-          />
-          <Route path="/library-settings/loan-type" element={<LoanType />} />
-          <Route
-            path="/library-class-books/add-class-books"
-            element={<AddClassBooks />}
-          />
-          <Route
-            path="/library-class-books/issue-books"
-            element={<IssueBooks />}
-          />
-          <Route
-            path="/library-class-books/return-books"
-            element={<ReturnBooks />}
-          />
-          <Route path="/email-sms/email" element={<SendEmail />} />
-          {/* Catch-all route for unimplemented features */}
-          <Route path="*" element={<ComingSoon />} />
-        </Route>
-      </Routes>
-    </Router>
+            element={
+              <ProtectedRoute>
+                <MainLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/" element={<Dashboard />} />
+            <Route path="registration/student" element={<Student />} />
+            <Route
+              path="class-allocation/student"
+              element={<StudentClassAllocation />}
+            />
+            <Route
+              path="class-allocation/staff"
+              element={<StaffClassAllocation />}
+            />
+            <Route
+              path="subject-allocation/student"
+              element={<StudentSubjectAllocation />}
+            />
+            <Route
+              path="subject-allocation/staff"
+              element={<StaffSubjectAllocation />}
+            />
+            <Route
+              path="exam/mark-entry-summary"
+              element={<MarkEntrySummary />}
+            />
+            <Route
+              path="attendance/attendance"
+              element={<StudentAttendance />}
+            />
+            <Route
+              path="attendance/attendance-status"
+              element={<AttendanceStatus />}
+            />
+            <Route
+              path="finance-settings/finance-settings"
+              element={<FinanceSettings />}
+            />
+            <Route
+              path="fee-and-receipt-processing/fee-selection"
+              element={<FeeSelection />}
+            />
+            <Route
+              path="fee-and-receipt-processing/fee-receipt-details"
+              element={<FeeReceipt />}
+            />
+            <Route
+              path="/pocket-money-processing/pocket-money"
+              element={<PocketMoney />}
+            />
+            <Route
+              path="/library-settings/book-subjects"
+              element={<BookSubjects />}
+            />
+            <Route
+              path="/library-settings/add-material"
+              element={<MaterialType />}
+            />
+            <Route path="/library-settings/loan-type" element={<LoanType />} />
+            <Route
+              path="/library-class-books/add-class-books"
+              element={<AddClassBooks />}
+            />
+            <Route
+              path="/library-class-books/issue-books"
+              element={<IssueBooks />}
+            />
+            <Route
+              path="/library-class-books/return-books"
+              element={<ReturnBooks />}
+            />
+            <Route path="/email-sms/email" element={<SendEmail />} />
+            {/* Catch-all route for unimplemented features */}
+            <Route path="*" element={<ComingSoon />} />
+          </Route>
+        </Routes>
+      </Router>
+    </AcademicProvider>
   );
 }
 

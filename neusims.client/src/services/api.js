@@ -58,31 +58,12 @@ import axios from "axios";
 import { AuthError } from "@utils/apiErrorHandler";
 
 const api = axios.create({
+  baseURL: "/api",
   headers: {
     "Content-Type": "application/json",
   },
-  baseURL: "/api", // Add this to ensure all requests go to /api
 });
 
-// api.interceptors.request.use((config) => {
-//   const token = localStorage.getItem("token");
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
-
-// api.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     if (error.response?.status === 401) {
-//       localStorage.removeItem("token");
-//       window.location.href = "/login";
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-// Add request interceptor for debugging
 api.interceptors.request.use(
   (config) => {
     console.log("Frontend Request:", {

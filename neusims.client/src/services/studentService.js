@@ -95,6 +95,18 @@ export const studentService = {
         CountryNo: 0, // Hardcoded for now
         ProvinceNo: 0,
         AreaNo: 0,
+
+        // Class allocation data
+        CurrentAcademicYear: studentData.academicYear || "",
+        CurrentClassNo: parseInt(studentData.classNo) || null,
+        CurrentStreamNo: parseInt(studentData.streamNo) || null,
+        AllocationId: studentData.allocationId || 0,
+      });
+      console.log("Save payload:", {
+        year: studentData.academicYear,
+        classNo: studentData.classNo,
+        streamNo: studentData.streamNo,
+        allocationId: studentData.allocationId,
       });
 
       return response.data;
@@ -124,6 +136,29 @@ export const studentService = {
       throw new Error(
         error.response?.data?.message || "Failed to fetch student details"
       );
+    }
+  },
+
+  saveStudentClassAllocation: async (data) => {
+    try {
+      const response = await api.post("/Entity/SaveStudentClass", {
+        ClassNo: data.classNo,
+        StreamNo: data.streamNo,
+        Year: data.academicYear,
+        RegNo: data.entityNo,
+        Status: true, // Default to active
+        FreshFeeStatus: false,
+      });
+      console.log("Class allocation payload:", {
+        ClassNo: data.classNo,
+        StreamNo: data.streamNo,
+        CurrentAcademicYear: data.academicYear,
+        RegNo: data.entityNo,
+      });
+
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to save student class allocation");
     }
   },
 };

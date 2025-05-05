@@ -133,8 +133,30 @@ namespace NeuSIMS.Server.Controllers
                     cmd.Parameters.Add("@NemisNo", SqlDbType.VarChar).Value = entity.NemisNo;
                     cmd.Parameters.Add("@EntityType", SqlDbType.VarChar).Value = entity.EntityType;
 
+                    // Class allocation parameters
+                    cmd.Parameters.Add("@CurrentAcademicYear", SqlDbType.NVarChar, 12).Value =
+                        (object)entity.CurrentAcademicYear ?? DBNull.Value;
+                    cmd.Parameters.Add("@CurrentClassNo", SqlDbType.Int).Value =
+                        (object)entity.CurrentClassNo ?? DBNull.Value;
+                    cmd.Parameters.Add("@CurrentStreamNo", SqlDbType.Int).Value =
+                        (object)entity.CurrentStreamNo ?? DBNull.Value;
+                    cmd.Parameters.Add("@AllocationId", SqlDbType.Int).Value =
+                        (object)entity.AllocationId ?? DBNull.Value;
+
 
                     cmd.ExecuteNonQuery();
+                    // Get the AllocationId back if it was generated
+                    if (entity.AllocationId == 0 && entity.CurrentClassNo.HasValue)
+                    {
+                        using (var getAllocCmd = new SqlCommand(
+                            "SELECT MAX(pn_Allocation_Id) FROM t_student_class WHERE fv_Reg_No = @RegNo",
+                            conn))
+                        {
+                            getAllocCmd.Parameters.AddWithValue("@RegNo", entity.EntityNo);
+                            entity.AllocationId = (int?)getAllocCmd.ExecuteScalar();
+                        }
+                    }
+
                     conn.Close();
                     return Ok(new
                     {
@@ -271,8 +293,22 @@ namespace NeuSIMS.Server.Controllers
                                     EmgWorkPhone = reader.IsDBNull(reader.GetOrdinal("EmgWorkPhone")) ? "" : reader.GetString(reader.GetOrdinal("EmgWorkPhone")),
                                     TransportArea = reader.IsDBNull(reader.GetOrdinal("TransportArea")) ? "" : reader.GetString(reader.GetOrdinal("TransportArea")),
                                     House = reader.IsDBNull(reader.GetOrdinal("House")) ? "" : reader.GetString(reader.GetOrdinal("House")),
-                                    NemisNo = reader.IsDBNull(reader.GetOrdinal("NemisNo")) ? "" : reader.GetString(reader.GetOrdinal("NemisNo"))
-                                };
+                                    NemisNo = reader.IsDBNull(reader.GetOrdinal("NemisNo")) ? "" : reader.GetString(reader.GetOrdinal("NemisNo")),
+
+                                    // include class details
+                                    CurrentAcademicYear = reader.IsDBNull(reader.GetOrdinal("CurrentAcademicYear")) ?
+                                        null : reader.GetString(reader.GetOrdinal("CurrentAcademicYear")),
+                                    CurrentClassNo = reader.IsDBNull(reader.GetOrdinal("CurrentClassNo")) ?
+                                        null : (int?)reader.GetInt32(reader.GetOrdinal("CurrentClassNo")),
+                                    CurrentClassName = reader.IsDBNull(reader.GetOrdinal("CurrentClassName")) ?
+                                        null : reader.GetString(reader.GetOrdinal("CurrentClassName")),
+                                    CurrentStreamNo = reader.IsDBNull(reader.GetOrdinal("CurrentStreamNo")) ?
+                                        null : (int?)reader.GetInt32(reader.GetOrdinal("CurrentStreamNo")),
+                                    CurrentStreamName = reader.IsDBNull(reader.GetOrdinal("CurrentStreamName")) ?
+                                        null : reader.GetString(reader.GetOrdinal("CurrentStreamName")),
+                                    AllocationId = reader.IsDBNull(reader.GetOrdinal("AllocationId")) ?
+                                        null : (int?)reader.GetInt32(reader.GetOrdinal("AllocationId")),
+                                }; //TODO get highest allocation ID for this student
                                 return Ok(student);
                             }
                             return NotFound($"Student with EntityNo {entityNo} not found");
@@ -286,6 +322,66 @@ namespace NeuSIMS.Server.Controllers
             }
 
 
+        }
+
+        [HttpPost("SaveStudentClassAllocation")]
+        public async Task<IActionResult> SaveStudentClassAllocation([FromBody] StudentClassAllocation allocation)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    // // First get the next available allocation ID
+                    // int nextAllocationId;
+                    // using (SqlCommand idCommand = new SqlCommand(
+                    //     "SELECT ISNULL(MAX(pn_Allocation_Id), 0) + 1 FROM t_student_class",
+                    //     connection))
+                    // {
+                    //     nextAllocationId = (int)await idCommand.ExecuteScalarAsync();
+                    // }
+
+                    using (SqlCommand command = new SqlCommand("SaveStudentClassAllocation", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        // command.Parameters.AddWithValue("@AllocationId", nextAllocationId);
+                        command.Parameters.AddWithValue("@ClassNo", allocation.ClassNo);
+                        command.Parameters.AddWithValue("@StreamNo", allocation.StreamNo);
+                        command.Parameters.AddWithValue("@Year", allocation.Year);
+                        command.Parameters.AddWithValue("@RegNo", allocation.RegNo);
+                        command.Parameters.AddWithValue("@Status", allocation.Status);
+                        command.Parameters.AddWithValue("@FreshFeeStatus", allocation.FreshFeeStatus);
+
+                        // Add output parameter
+                        var allocationIdParam = new SqlParameter
+                        {
+                            ParameterName = "@AllocationId",
+                            SqlDbType = SqlDbType.Int,
+                            Direction = ParameterDirection.Output
+                        };
+                        command.Parameters.Add(allocationIdParam);
+
+                        await command.ExecuteNonQueryAsync();
+
+                        // Get the allocation ID (either new or existing)
+                        allocation.AllocationId = (int)allocationIdParam.Value;
+
+                        // await command.ExecuteNonQueryAsync();
+                        // allocation.AllocationId = nextAllocationId;
+
+                        return Ok(new
+                        {
+                            message = "Student class allocation saved successfully",
+                            allocation = allocation
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
     }
 }
